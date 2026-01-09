@@ -56,8 +56,11 @@ TTC_API = "https://ttc-alerts-api.vercel.app/api"
 @st.cache_data(ttl=60)
 def fetch_data(url):
     try:
-        return requests.get(url, timeout=10).json()
-    except:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        st.error(f"Error fetching data from {url}: {str(e)}")
         return None
 
 # Sidebar
@@ -106,9 +109,13 @@ col1, col2, col3, col4, col5 = st.columns(5)
 
 if show_go:
     go_stats = fetch_data(f"{GO_API}?type=stats")
-    if go_stats:
+    if go_stats and isinstance(go_stats, list) and len(go_stats) > 0:
         stats_dict = {i['metric']: i['value'] for i in go_stats}
+    else:
+        st.warning("Unable to load GO Transit statistics")
+        stats_dict = {}
 
+    if stats_dict:
         with col1:
             st.metric(
                 "🚆 GO Performance",
@@ -206,28 +213,25 @@ if show_go:
 
         with col3:
             # On-Time vs Delayed
-            fig_status = go.Figure(data=[
-                go.Bar(
-                    name='Vehicles',
-                    x=['On Time', 'Delayed'],
-                    y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
-                    marker=dict(
-                        color=['#4CAF50', '#f44336'],
-                        line=dict(color='white', width=2)
-                    ),
-                    text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
-                    textposition='outside',
-                    textfont=dict(size=16, color='black', family='Arial Black'),
-                    hovertemplate='<b>%{x}</b><br>Count: %{y}<extra></extra>'
-                )
-            ])
+            fig_status = go.Figure()
+
+            fig_status.add_trace(go.Bar(
+                x=['On Time', 'Delayed'],
+                y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
+                marker=dict(
+                    color=['#0066CC', '#1E90FF'],
+                    line=dict(color='white', width=2)
+                ),
+                text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
+                textposition='outside',
+                textfont=dict(size=16)
+            ))
+
             fig_status.update_layout(
                 title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
                 height=300,
-                yaxis_title='Number of Vehicles',
+                yaxis_title='Vehicles',
                 showlegend=False,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
                 margin=dict(l=40, r=40, t=60, b=40)
             )
             st.plotly_chart(fig_status, use_container_width=True)
