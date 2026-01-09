@@ -17,7 +17,7 @@ st.markdown("""
     <style>
     .main {padding: 0rem 1rem;}
     h1 {
-        background: linear-gradient(135deg, #00853E 0%, #0066CC 100%);
+        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 3rem;
@@ -28,10 +28,10 @@ st.markdown("""
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        border-left: 5px solid #00853E;
+        border-left: 5px solid #0066CC;
     }
     .vehicle-card {
-        background: linear-gradient(135deg, #00853E 0%, #00A651 100%);
+        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
         padding: 15px;
         border-radius: 10px;
         color: white;
@@ -215,7 +215,7 @@ if show_map and not df_with_location.empty:
             "Latitude": ":.4f",
             "Longitude": ":.4f"
         },
-        color_discrete_map={"Train": "#00853E", "Bus": "#0066CC"},
+        color_discrete_map={"Train": "#0066CC", "Bus": "#1E90FF"},
         zoom=zoom,
         height=500
     )
@@ -373,7 +373,7 @@ else:
 # Footer
 st.markdown("---")
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #00853E 0%, #0066CC 100%); border-radius: 10px; color: white;'>
+    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%); border-radius: 10px; color: white;'>
         <h3>🔍 Vehicle Tracker</h3>
         <p>Real-time GPS tracking powered by Metrolinx Open API</p>
         <p>Data refreshes every 60 seconds</p>

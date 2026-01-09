@@ -18,14 +18,14 @@ st.markdown("""
     <style>
     .main {padding: 0rem 1rem;}
     h1 {
-        background: linear-gradient(135deg, #00853E 0%, #0066CC 100%);
+        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 3rem;
         font-weight: 800;
     }
     .metric-card {
-        background: linear-gradient(135deg, #00853E 0%, #00A651 100%);
+        background: linear-gradient(135deg, #0066CC 0%, #0080FF 100%);
         padding: 25px;
         border-radius: 15px;
         color: white;
@@ -194,10 +194,10 @@ if show_trends:
             y=df_history['performance'],
             mode='lines+markers',
             name='Performance %',
-            line=dict(color='#00853E', width=3),
+            line=dict(color='#0066CC', width=3),
             marker=dict(size=8),
             fill='tozeroy',
-            fillcolor='rgba(0, 133, 62, 0.1)',
+            fillcolor='rgba(0, 102, 204, 0.1)',
             hovertemplate='<b>Date:</b> %{x|%b %d}<br><b>Performance:</b> %{y:.1f}%<extra></extra>'
         ))
 
@@ -217,7 +217,7 @@ if show_trends:
             y=df_history['ma_7'],
             mode='lines',
             name='7-Day Moving Avg',
-            line=dict(color='#FF6B35', width=2, dash='dot'),
+            line=dict(color='#1E90FF', width=2, dash='dot'),
             hovertemplate='<b>7-Day Avg:</b> %{y:.1f}%<extra></extra>'
         ))
 
@@ -242,7 +242,7 @@ if show_trends:
                 x=df_history['date'],
                 y=df_history['trains'],
                 name='Trains',
-                marker=dict(color='#00853E'),
+                marker=dict(color='#0066CC'),
                 hovertemplate='Trains: %{y}<extra></extra>'
             ))
 
@@ -250,7 +250,7 @@ if show_trends:
                 x=df_history['date'],
                 y=df_history['buses'],
                 name='Buses',
-                marker=dict(color='#0066CC'),
+                marker=dict(color='#1E90FF'),
                 hovertemplate='Buses: %{y}<extra></extra>'
             ))
 
@@ -545,7 +545,7 @@ if show_insights:
 
     with insights_col1:
         st.markdown("""
-        <div style='background: linear-gradient(135deg, #00853E 0%, #00A651 100%); padding: 25px; border-radius: 15px; color: white;'>
+        <div style='background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%); padding: 25px; border-radius: 15px; color: white;'>
             <h3>📊 Performance Insights</h3>
             <ul>
                 <li>Average performance: <b>{:.1f}%</b> ({} vs 95% target)</li>
@@ -564,7 +564,7 @@ if show_insights:
 
     with insights_col2:
         st.markdown("""
-        <div style='background: linear-gradient(135deg, #0066CC 0%, #0080FF 100%); padding: 25px; border-radius: 15px; color: white;'>
+        <div style='background: linear-gradient(135deg, #4169E1 0%, #6495ED 100%); padding: 25px; border-radius: 15px; color: white;'>
             <h3>🎯 Recommendations</h3>
             <ul>
                 <li>Focus on routes with <80% on-time rate</li>

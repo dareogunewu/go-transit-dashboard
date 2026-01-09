@@ -25,7 +25,7 @@ st.markdown("""
     <style>
     .main {padding: 0rem 1rem;}
     .stMetric {
-        background: linear-gradient(135deg, #00853E 0%, #00A651 100%);
+        background: linear-gradient(135deg, #0066CC 0%, #0080FF 100%);
         padding: 20px;
         border-radius: 10px;
         color: white;
@@ -34,7 +34,7 @@ st.markdown("""
     .stMetric label {color: rgba(255,255,255,0.9) !important; font-weight: 600;}
     .stMetric [data-testid="stMetricValue"] {color: white !important; font-size: 2rem !important;}
     h1 {
-        background: linear-gradient(135deg, #00853E 0%, #0066CC 100%);
+        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 3rem;
@@ -45,7 +45,7 @@ st.markdown("""
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        border-left: 5px solid #00853E;
+        border-left: 5px solid #0066CC;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -160,12 +160,12 @@ if show_go:
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
                 value=stats_dict.get('Performance Rate', 0),
-                title={'text': "On-Time Performance", 'font': {'size': 24, 'color': '#00853E'}},
-                delta={'reference': 95, 'increasing': {'color': 'green'}},
+                title={'text': "On-Time Performance", 'font': {'size': 24, 'color': '#0066CC'}},
+                delta={'reference': 95, 'increasing': {'color': '#0066CC'}},
                 number={'suffix': '%', 'font': {'size': 48}},
                 gauge={
                     'axis': {'range': [None, 100], 'tickwidth': 2},
-                    'bar': {'color': "#00853E", 'thickness': 0.8},
+                    'bar': {'color': "#0066CC", 'thickness': 0.8},
                     'bgcolor': "white",
                     'borderwidth': 2,
                     'bordercolor': "gray",
@@ -191,7 +191,7 @@ if show_go:
                 labels=['Trains', 'Buses'],
                 values=[stats_dict.get('Trains Active', 0), stats_dict.get('Buses Active', 0)],
                 hole=0.4,
-                marker=dict(colors=['#00853E', '#0066CC'], line=dict(color='white', width=2)),
+                marker=dict(colors=['#0066CC', '#1E90FF'], line=dict(color='white', width=2)),
                 textinfo='label+value+percent',
                 textfont=dict(size=14, color='white'),
                 hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
@@ -252,7 +252,7 @@ if show_go:
         st.subheader("📈 24-Hour Activity Trends")
 
         fig_ts = go.Figure()
-        colors = ['#00853E', '#0066CC', '#FF6B35']
+        colors = ['#0066CC', '#1E90FF', '#4169E1']
 
         for idx, series in enumerate(go_timeseries):
             timestamps = [datetime.fromtimestamp(p[1]/1000) for p in series['datapoints']]
@@ -330,7 +330,7 @@ if show_ttc:
             fig_services = go.Figure(data=[go.Pie(
                 labels=[s[0] for s in service_data],
                 values=[s[1] for s in service_data],
-                marker=dict(colors=['#DA291C', '#0066CC', '#00853E']),
+                marker=dict(colors=['#0066CC', '#1E90FF', '#4169E1']),
                 textinfo='label+value',
                 hole=0.3
             )])
@@ -361,7 +361,7 @@ if show_ttc:
 # Footer
 st.markdown("---")
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #00853E 0%, #0066CC 100%); border-radius: 10px; color: white;'>
+    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%); border-radius: 10px; color: white;'>
         <h3>📡 Live Data Feed</h3>
         <p>TTC GTFS-Realtime • Metrolinx Open API • Powered by Streamlit</p>
         <p>Last Updated: {}</p>
