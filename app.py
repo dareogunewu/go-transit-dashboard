@@ -1,3 +1,8 @@
+"""
+Toronto Transit Dashboard - Home Page
+Professional transit monitoring and analytics platform
+"""
+
 import streamlit as st
 import requests
 import pandas as pd
@@ -5,12 +10,45 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import time
-from route_data import get_route_name, get_station_name
+from route_data import get_route_name
 
 # Page config
-st.set_page_config(page_title="Toronto Transit Live", page_icon="🚇", layout="wide")
+st.set_page_config(
+    page_title="Toronto Transit Dashboard",
+    page_icon="🚇",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-st.markdown("<style>.main {padding: 0rem 1rem;} .stMetric {background-color: #f0f2f6; padding: 10px; border-radius: 5px;} h1 {color: #00853E;}</style>", unsafe_allow_html=True)
+# Custom theme
+st.markdown("""
+    <style>
+    .main {padding: 0rem 1rem;}
+    .stMetric {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .stMetric label {color: rgba(255,255,255,0.9) !important; font-weight: 600;}
+    .stMetric [data-testid="stMetricValue"] {color: white !important; font-size: 2rem !important;}
+    h1 {
+        background: linear-gradient(135deg, #00853E 0%, #0066CC 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3rem;
+        font-weight: 800;
+    }
+    .metric-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        border-left: 5px solid #00853E;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 GO_API = "https://ttc-alerts-api.vercel.app/api/go"
 TTC_API = "https://ttc-alerts-api.vercel.app/api"
@@ -24,200 +62,317 @@ def fetch_data(url):
 
 # Sidebar
 with st.sidebar:
-    st.title("🚇 Controls")
-    show_ttc = st.checkbox("TTC", value=True)
-    show_go = st.checkbox("GO Transit", value=True)
-    st.markdown("### 🔍 Vehicle Search")
-    search_type = st.radio("", ["Trip #", "Route", "Off"])
-    if search_type == "Trip #":
-        trip_search = st.text_input("Trip number:")
-    elif search_type == "Route":
-        route_search = st.text_input("Route code:")
-    auto_refresh = st.checkbox("Auto-refresh", value=True)
-    if st.button("🔄 Refresh"):
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/GO_Transit_logo.svg/200px-GO_Transit_logo.svg.png", width=150)
+    st.title("🚇 Navigation")
+    st.markdown("---")
+
+    st.markdown("### 📊 Pages")
+    st.markdown("- **🏠 Home** (Current)")
+    st.markdown("- **📈 Analytics**")
+    st.markdown("- **🔍 Vehicle Tracker**")
+
+    st.markdown("---")
+    st.markdown("### ⚙️ Settings")
+    auto_refresh = st.checkbox("Auto-refresh (60s)", value=True)
+    show_ttc = st.checkbox("Show TTC", value=True)
+    show_go = st.checkbox("Show GO Transit", value=True)
+
+    if st.button("🔄 Refresh Now", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
 
-st.title("🚇 Toronto Transit Dashboard")
-st.caption(f"⏱️ {datetime.now().strftime('%H:%M:%S EST • %Y-%m-%d')}")
+    st.markdown("---")
+    st.caption("📡 **Data Sources**")
+    st.caption("• TTC GTFS-Realtime")
+    st.caption("• Metrolinx Open API")
+    st.caption(f"🕐 {datetime.now().strftime('%H:%M:%S')}")
+
+# Header
+col1, col2 = st.columns([3, 1])
+with col1:
+    st.title("🚇 Toronto Transit Command Center")
+    st.markdown("### Real-time monitoring for TTC & GO Transit • Greater Toronto Area")
+with col2:
+    st.metric("System Status", "🟢 OPERATIONAL", delta="All Systems Online")
+
 st.markdown("---")
 
-# Vehicle Search
-go_vehicles = fetch_data(f"{GO_API}?type=vehicles")
-if search_type != "Off" and go_vehicles and go_vehicles.get('vehicles'):
-    df = pd.DataFrame(go_vehicles['vehicles'])
-    if search_type == "Trip #" and 'trip_search' in locals() and trip_search:
-        df = df[df['TripNumber'].astype(str).str.contains(trip_search, case=False)]
-    elif search_type == "Route" and 'route_search' in locals() and route_search:
-        df = df[df['Line'].str.upper() == route_search.upper()]
+# ============================================================================
+# NETWORK OVERVIEW - Hero Section
+# ============================================================================
+st.header("📊 Network Overview")
 
-    if not df.empty:
-        st.success(f"🔍 Found {len(df)} vehicle(s)")
-        df['RouteName'] = df['Line'].apply(get_route_name)
-        df_map = df[(df['Latitude'] != 0) & (df['Longitude'] != 0)]
+col1, col2, col3, col4, col5 = st.columns(5)
 
-        if not df_map.empty:
-            fig = px.scatter_mapbox(df_map, lat="Latitude", lon="Longitude", color="Type",
-                                   hover_name="Display", hover_data={"Status": True, "RouteName": True,
-                                   "TripNumber": True, "Latitude": False, "Longitude": False},
-                                   color_discrete_map={"Train": "#00853E", "Bus": "#0066CC"},
-                                   zoom=10, height=350)
-            fig.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
-            st.plotly_chart(fig, use_container_width=True)
-
-        st.dataframe(df[['Type', 'TripNumber', 'RouteName', 'Display', 'Status', 'IsInMotion']], use_container_width=True)
-        st.markdown("---")
-
-# TTC
-if show_ttc:
-    st.header("🚇 TTC")
-    ttc_summary = fetch_data(f"{TTC_API}/summary")
-    if ttc_summary:
-        cols = st.columns(6)
-        d = {i['metric']: i['value'] for i in ttc_summary}
-        for i, (k, v) in enumerate(d.items()):
-            cols[i].metric(k, v)
-
-    ttc_alerts = fetch_data(f"{TTC_API}/alerts")
-    if ttc_alerts:
-        df_ttc = pd.DataFrame(ttc_alerts).head(15)
-        def hl(row):
-            c = {'High': '#f8d7da', 'Medium': '#fff3cd', 'Low': '#d1ecf1'}
-            return [f'background-color: {c.get(row["Severity"], "#fff")}'] * len(row)
-        st.dataframe(df_ttc.style.apply(hl, axis=1), use_container_width=True, height=350)
-
-        c1, c2 = st.columns(2)
-        with c1:
-            st.plotly_chart(px.pie(values=df_ttc['Type'].value_counts().values,
-                                  names=df_ttc['Type'].value_counts().index,
-                                  title='By Type'), use_container_width=True)
-        with c2:
-            st.plotly_chart(px.bar(x=df_ttc['Severity'].value_counts().index,
-                                  y=df_ttc['Severity'].value_counts().values,
-                                  title='By Severity'), use_container_width=True)
-    st.markdown("---")
-
-# GO Transit
 if show_go:
-    st.header("🚆 GO Transit")
     go_stats = fetch_data(f"{GO_API}?type=stats")
     if go_stats:
-        d = {i['metric']: i['value'] for i in go_stats}
-        cols = st.columns(6)
-        cols[0].metric("Performance", f"{d.get('Performance Rate', 0)}%")
-        cols[1].metric("Vehicles", d.get('Total Vehicles', 0))
-        cols[2].metric("Trains", d.get('Trains Active', 0))
-        cols[3].metric("Buses", d.get('Buses Active', 0))
-        cols[4].metric("On Time", d.get('On Time', 0))
-        cols[5].metric("Delayed", d.get('Delayed', 0))
+        stats_dict = {i['metric']: i['value'] for i in go_stats}
 
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            fig = go.Figure(go.Indicator(mode="gauge+number", value=d.get('Performance Rate', 0),
-                          gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "blue"},
-                          'steps': [{'range': [0,70], 'color': "lightcoral"},
-                                   {'range': [70,85], 'color': "lightyellow"},
-                                   {'range': [85,100], 'color': "lightgreen"}]}))
-            fig.update_layout(height=250)
-            st.plotly_chart(fig, use_container_width=True)
-        with c2:
-            st.plotly_chart(px.bar(x=['On Time', 'Delayed'],
-                                  y=[d.get('On Time', 0), d.get('Delayed', 0)],
-                                  color=['On Time', 'Delayed'],
-                                  color_discrete_map={'On Time': 'green', 'Delayed': 'red'}),
-                           use_container_width=True)
-        with c3:
-            st.plotly_chart(px.pie(values=[d.get('Trains Active', 0), d.get('Buses Active', 0)],
-                                  names=['Trains', 'Buses']), use_container_width=True)
+        with col1:
+            st.metric(
+                "🚆 GO Performance",
+                f"{stats_dict.get('Performance Rate', 0)}%",
+                delta=f"{stats_dict.get('Performance Rate', 0) - 95}% vs target",
+                delta_color="normal" if stats_dict.get('Performance Rate', 0) >= 95 else "inverse"
+            )
 
+        with col2:
+            st.metric("🚊 Active Vehicles", stats_dict.get('Total Vehicles', 0),
+                     delta=f"{stats_dict.get('Trains in Motion', 0) + stats_dict.get('Buses in Motion', 0)} moving")
+
+        with col3:
+            st.metric("✅ On Time", stats_dict.get('On Time', 0),
+                     delta=f"{round(stats_dict.get('On Time', 0) / stats_dict.get('Total Vehicles', 1) * 100)}%")
+
+if show_ttc:
+    ttc_summary = fetch_data(f"{TTC_API}/summary")
+    if ttc_summary:
+        summary_dict = {i['metric']: i['value'] for i in ttc_summary}
+
+        with col4:
+            st.metric("🚨 TTC Alerts", summary_dict.get('Total Alerts', 0),
+                     delta=f"{summary_dict.get('Critical', 0)} critical",
+                     delta_color="inverse" if summary_dict.get('Critical', 0) > 0 else "off")
+
+        with col5:
+            total_services = summary_dict.get('Subway', 0) + summary_dict.get('Bus', 0) + summary_dict.get('Streetcar', 0)
+            st.metric("🚇 TTC Services", total_services,
+                     delta=f"{summary_dict.get('Subway', 0)} subway")
+
+st.markdown("---")
+
+# ============================================================================
+# GO TRANSIT SECTION
+# ============================================================================
+if show_go:
+    st.header("🚆 GO Transit Live Status")
+
+    go_stats = fetch_data(f"{GO_API}?type=stats")
+    if go_stats:
+        stats_dict = {i['metric']: i['value'] for i in go_stats}
+
+        # Performance Dashboard
+        col1, col2, col3, col4 = st.columns(4)
+
+        with col1:
+            # Performance Gauge
+            fig_gauge = go.Figure(go.Indicator(
+                mode="gauge+number+delta",
+                value=stats_dict.get('Performance Rate', 0),
+                title={'text': "On-Time Performance", 'font': {'size': 24, 'color': '#00853E'}},
+                delta={'reference': 95, 'increasing': {'color': 'green'}},
+                number={'suffix': '%', 'font': {'size': 48}},
+                gauge={
+                    'axis': {'range': [None, 100], 'tickwidth': 2},
+                    'bar': {'color': "#00853E", 'thickness': 0.8},
+                    'bgcolor': "white",
+                    'borderwidth': 2,
+                    'bordercolor': "gray",
+                    'steps': [
+                        {'range': [0, 70], 'color': '#ffebee'},
+                        {'range': [70, 85], 'color': '#fff9c4'},
+                        {'range': [85, 95], 'color': '#e8f5e9'},
+                        {'range': [95, 100], 'color': '#c8e6c9'}
+                    ],
+                    'threshold': {
+                        'line': {'color': "red", 'width': 4},
+                        'thickness': 0.75,
+                        'value': 95
+                    }
+                }
+            ))
+            fig_gauge.update_layout(height=300, margin=dict(l=20, r=20, t=60, b=20))
+            st.plotly_chart(fig_gauge, use_container_width=True)
+
+        with col2:
+            # Service Distribution
+            fig_fleet = go.Figure(data=[go.Pie(
+                labels=['Trains', 'Buses'],
+                values=[stats_dict.get('Trains Active', 0), stats_dict.get('Buses Active', 0)],
+                hole=0.4,
+                marker=dict(colors=['#00853E', '#0066CC'], line=dict(color='white', width=2)),
+                textinfo='label+value+percent',
+                textfont=dict(size=14, color='white'),
+                hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
+            )])
+            fig_fleet.update_layout(
+                title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
+                height=300,
+                showlegend=True,
+                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
+            )
+            st.plotly_chart(fig_fleet, use_container_width=True)
+
+        with col3:
+            # On-Time vs Delayed
+            fig_status = go.Figure(data=[
+                go.Bar(
+                    name='Vehicles',
+                    x=['On Time', 'Delayed'],
+                    y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
+                    marker=dict(
+                        color=['#4CAF50', '#f44336'],
+                        line=dict(color='white', width=2)
+                    ),
+                    text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
+                    textposition='outside',
+                    textfont=dict(size=16, color='black', family='Arial Black'),
+                    hovertemplate='<b>%{x}</b><br>Count: %{y}<extra></extra>'
+                )
+            ])
+            fig_status.update_layout(
+                title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
+                height=300,
+                yaxis_title='Number of Vehicles',
+                showlegend=False,
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=40, r=40, t=60, b=40)
+            )
+            st.plotly_chart(fig_status, use_container_width=True)
+
+        with col4:
+            # Key Metrics Cards
+            st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+            st.metric("Total Vehicles", stats_dict.get('Total Vehicles', 0))
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            st.markdown('<div class="metric-card" style="margin-top:10px;">', unsafe_allow_html=True)
+            st.metric("Train Lines", stats_dict.get('Train Lines', 0))
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            st.markdown('<div class="metric-card" style="margin-top:10px;">', unsafe_allow_html=True)
+            st.metric("Bus Routes", stats_dict.get('Bus Routes', 0))
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    # Time Series Trends
     go_timeseries = fetch_data(f"{GO_API}?type=timeseries")
     if go_timeseries:
-        fig = go.Figure()
-        for s in go_timeseries:
-            fig.add_trace(go.Scatter(x=[datetime.fromtimestamp(p[1]/1000) for p in s['datapoints']],
-                                    y=[p[0] for p in s['datapoints']], mode='lines', name=s['target']))
-        fig.update_layout(height=300)
-        st.plotly_chart(fig, use_container_width=True)
+        st.subheader("📈 24-Hour Activity Trends")
 
-    c1, c2 = st.columns(2)
-    with c1:
-        st.subheader("🚉 Union Station")
-        go_union = fetch_data(f"{GO_API}?type=union")
-        if go_union:
-            df = pd.DataFrame(go_union)
-            st.dataframe(df, use_container_width=True, height=350)
+        fig_ts = go.Figure()
+        colors = ['#00853E', '#0066CC', '#FF6B35']
 
-    with c2:
-        st.subheader("🚂 Train Lines")
-        go_trains = fetch_data(f"{GO_API}?type=lines&vehicleType=trains")
-        if go_trains:
-            df = pd.DataFrame(go_trains)
-            df['LineName'] = df['Code'].apply(get_route_name)
-            st.plotly_chart(px.bar(df, x='LineName', y=['OnTime', 'Delayed'],
-                                  barmode='group'), use_container_width=True)
-            st.dataframe(df[['LineName', 'Total', 'OnTime', 'Delayed']], use_container_width=True)
+        for idx, series in enumerate(go_timeseries):
+            timestamps = [datetime.fromtimestamp(p[1]/1000) for p in series['datapoints']]
+            values = [p[0] for p in series['datapoints']]
 
-    st.subheader("🚌 Bus Routes")
-    go_buses = fetch_data(f"{GO_API}?type=lines&vehicleType=buses")
-    if go_buses:
-        df = pd.DataFrame(go_buses)
-        df['RouteName'] = df['Code'].apply(get_route_name)
+            fig_ts.add_trace(go.Scatter(
+                x=timestamps,
+                y=values,
+                mode='lines+markers',
+                name=series['target'],
+                line=dict(width=3, color=colors[idx % len(colors)]),
+                marker=dict(size=6),
+                fill='tonexty' if idx > 0 else None,
+                hovertemplate='<b>%{fullData.name}</b><br>Time: %{x|%H:%M}<br>Value: %{y}<extra></extra>'
+            ))
 
-        c1, c2 = st.columns([2, 1])
-        with c1:
-            top20 = df.nlargest(20, 'Total')
-            fig = go.Figure()
-            fig.add_trace(go.Bar(y=top20['RouteName'], x=top20['OnTime'], name='On Time',
-                                orientation='h', marker=dict(color='green')))
-            fig.add_trace(go.Bar(y=top20['RouteName'], x=top20['Delayed'], name='Delayed',
-                                orientation='h', marker=dict(color='red')))
-            fig.update_layout(barmode='stack', height=600, yaxis={'categoryorder': 'total ascending'})
-            st.plotly_chart(fig, use_container_width=True)
+        fig_ts.update_layout(
+            height=400,
+            hovermode='x unified',
+            plot_bgcolor='rgba(0,0,0,0.02)',
+            xaxis=dict(title='Time', showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
+            yaxis=dict(title='Count / Percentage', showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
+            legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5),
+            margin=dict(l=60, r=40, t=40, b=80)
+        )
 
-        with c2:
-            st.markdown("### 📊 Stats")
-            st.metric("Routes", len(df))
-            st.metric("Buses", int(df['Total'].sum()))
-            busiest = df.nlargest(1, 'Total').iloc[0]
-            st.metric("Busiest", busiest['Code'])
-            st.caption(busiest['RouteName'])
-            st.metric("On-Time Routes", len(df[df['Delayed'] == 0]))
+        st.plotly_chart(fig_ts, use_container_width=True)
 
-        with st.expander("📋 All Routes"):
-            search = st.text_input("Search:")
-            if search:
-                df = df[df['Code'].str.contains(search, case=False) | 
-                       df['RouteName'].str.contains(search, case=False)]
-            st.dataframe(df[['Code', 'RouteName', 'Total', 'OnTime', 'Delayed']],
-                        use_container_width=True, height=400)
+    st.markdown("---")
 
-    if go_vehicles and go_vehicles.get('vehicles'):
-        st.subheader("🗺️ Live Vehicles")
-        df = pd.DataFrame(go_vehicles['vehicles'])
-        df['RouteName'] = df['Line'].apply(get_route_name)
-        df_map = df[(df['Latitude'] != 0) & (df['Longitude'] != 0)]
+# ============================================================================
+# TTC SECTION
+# ============================================================================
+if show_ttc:
+    st.header("🚇 TTC Service Status")
 
-        if not df_map.empty:
-            c1, c2 = st.columns([3, 1])
-            with c1:
-                fig = px.scatter_mapbox(df_map, lat="Latitude", lon="Longitude", color="Type",
-                                       hover_name="Display", hover_data={"RouteName": True, "Status": True},
-                                       color_discrete_map={"Train": "#00853E", "Bus": "#0066CC"},
-                                       zoom=8, height=450)
-                fig.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
-                st.plotly_chart(fig, use_container_width=True)
-            with c2:
-                st.metric("Tracked", len(df_map))
-                st.metric("Trains", len(df_map[df_map['Type'] == 'Train']))
-                st.metric("Buses", len(df_map[df_map['Type'] == 'Bus']))
-                st.metric("Moving", len(df_map[df_map['IsInMotion'] == True]))
+    ttc_alerts = fetch_data(f"{TTC_API}/alerts")
+    ttc_summary = fetch_data(f"{TTC_API}/summary")
 
-st.caption("📡 TTC GTFS-RT • Metrolinx API • ⚡ Streamlit")
+    if ttc_summary:
+        summary_dict = {i['metric']: i['value'] for i in ttc_summary}
 
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            # Alert Severity Gauge
+            critical_pct = (summary_dict.get('Critical', 0) / max(summary_dict.get('Total Alerts', 1), 1)) * 100
+
+            fig_severity = go.Figure(go.Indicator(
+                mode="number+gauge",
+                value=critical_pct,
+                title={'text': "Critical Alert Ratio", 'font': {'size': 20}},
+                number={'suffix': '%', 'font': {'size': 36}},
+                gauge={
+                    'axis': {'range': [None, 100]},
+                    'bar': {'color': "darkred"},
+                    'steps': [
+                        {'range': [0, 25], 'color': "lightgreen"},
+                        {'range': [25, 50], 'color': "lightyellow"},
+                        {'range': [50, 100], 'color': "lightcoral"}
+                    ]
+                }
+            ))
+            fig_severity.update_layout(height=250)
+            st.plotly_chart(fig_severity, use_container_width=True)
+
+        with col2:
+            # Service Type Distribution
+            service_data = [
+                ('Subway', summary_dict.get('Subway', 0)),
+                ('Bus', summary_dict.get('Bus', 0)),
+                ('Streetcar', summary_dict.get('Streetcar', 0))
+            ]
+
+            fig_services = go.Figure(data=[go.Pie(
+                labels=[s[0] for s in service_data],
+                values=[s[1] for s in service_data],
+                marker=dict(colors=['#DA291C', '#0066CC', '#00853E']),
+                textinfo='label+value',
+                hole=0.3
+            )])
+            fig_services.update_layout(
+                title={'text': 'Alerts by Service', 'x': 0.5, 'xanchor': 'center'},
+                height=250
+            )
+            st.plotly_chart(fig_services, use_container_width=True)
+
+        with col3:
+            st.markdown("### Alert Summary")
+            st.metric("Total Alerts", summary_dict.get('Total Alerts', 0))
+            st.metric("Critical", summary_dict.get('Critical', 0), delta_color="inverse")
+            st.metric("High Severity", summary_dict.get('High Severity', 0))
+
+    if ttc_alerts:
+        st.subheader("🚨 Active Service Disruptions")
+        df_ttc = pd.DataFrame(ttc_alerts).head(15)
+
+        def highlight_severity(row):
+            colors = {'High': '#ffcdd2', 'Medium': '#fff9c4', 'Low': '#b3e5fc'}
+            color = colors.get(row['Severity'], '#ffffff')
+            return [f'background-color: {color}; padding: 10px; border-radius: 5px;'] * len(row)
+
+        styled_df = df_ttc.style.apply(highlight_severity, axis=1)
+        st.dataframe(styled_df, use_container_width=True, height=400)
+
+# Footer
+st.markdown("---")
+st.markdown("""
+    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;'>
+        <h3>📡 Live Data Feed</h3>
+        <p>TTC GTFS-Realtime • Metrolinx Open API • Powered by Streamlit</p>
+        <p>Last Updated: {}</p>
+    </div>
+""".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S EST")), unsafe_allow_html=True)
+
+# Auto-refresh
 if auto_refresh:
-    if 'last' not in st.session_state:
-        st.session_state.last = time.time()
-    if time.time() - st.session_state.last > 60:
-        st.session_state.last = time.time()
+    if 'last_refresh' not in st.session_state:
+        st.session_state.last_refresh = time.time()
+    if time.time() - st.session_state.last_refresh > 60:
+        st.session_state.last_refresh = time.time()
         st.cache_data.clear()
         st.rerun()
