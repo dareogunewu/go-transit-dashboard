@@ -134,7 +134,7 @@ if show_go:
 
 if show_ttc:
     ttc_summary = fetch_data(f"{TTC_API}/summary")
-    if ttc_summary:
+    if ttc_summary and isinstance(ttc_summary, list) and len(ttc_summary) > 0:
         summary_dict = {i['metric']: i['value'] for i in ttc_summary}
 
         with col4:
@@ -177,13 +177,13 @@ if show_go:
                     'borderwidth': 2,
                     'bordercolor': "gray",
                     'steps': [
-                        {'range': [0, 70], 'color': '#ffebee'},
-                        {'range': [70, 85], 'color': '#fff9c4'},
-                        {'range': [85, 95], 'color': '#e8f5e9'},
-                        {'range': [95, 100], 'color': '#c8e6c9'}
+                        {'range': [0, 70], 'color': '#E3F2FD'},
+                        {'range': [70, 85], 'color': '#BBDEFB'},
+                        {'range': [85, 95], 'color': '#90CAF9'},
+                        {'range': [95, 100], 'color': '#64B5F6'}
                     ],
                     'threshold': {
-                        'line': {'color': "red", 'width': 4},
+                        'line': {'color': "#1E90FF", 'width': 4},
                         'thickness': 0.75,
                         'value': 95
                     }
@@ -308,15 +308,15 @@ if show_ttc:
             fig_severity = go.Figure(go.Indicator(
                 mode="number+gauge",
                 value=critical_pct,
-                title={'text': "Critical Alert Ratio", 'font': {'size': 20}},
+                title={'text': "Critical Alert Ratio", 'font': {'size': 20, 'color': '#0066CC'}},
                 number={'suffix': '%', 'font': {'size': 36}},
                 gauge={
                     'axis': {'range': [None, 100]},
-                    'bar': {'color': "darkred"},
+                    'bar': {'color': "#0066CC"},
                     'steps': [
-                        {'range': [0, 25], 'color': "lightgreen"},
-                        {'range': [25, 50], 'color': "lightyellow"},
-                        {'range': [50, 100], 'color': "lightcoral"}
+                        {'range': [0, 25], 'color': '#E3F2FD'},
+                        {'range': [25, 50], 'color': '#90CAF9'},
+                        {'range': [50, 100], 'color': '#1E90FF'}
                     ]
                 }
             ))
@@ -350,7 +350,7 @@ if show_ttc:
             st.metric("Critical", summary_dict.get('Critical', 0), delta_color="inverse")
             st.metric("High Severity", summary_dict.get('High Severity', 0))
 
-    if ttc_alerts:
+    if ttc_alerts and isinstance(ttc_alerts, list) and len(ttc_alerts) > 0:
         st.subheader("🚨 Active Service Disruptions")
         df_ttc = pd.DataFrame(ttc_alerts).head(15)
 
