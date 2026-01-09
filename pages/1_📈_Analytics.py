@@ -14,23 +14,36 @@ from route_data import get_route_name
 
 st.set_page_config(page_title="Analytics", page_icon="📈", layout="wide")
 
+# Professional Executive Theme
 st.markdown("""
     <style>
-    .main {padding: 0rem 1rem;}
-    h1 {
-        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 3rem;
-        font-weight: 800;
+    .main {padding: 0rem 1rem; background-color: #f8f9fa;}
+
+    .stMetric {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+    .stMetric label {color: #666 !important; font-weight: 500; font-size: 0.875rem !important; text-transform: uppercase; letter-spacing: 0.5px;}
+    .stMetric [data-testid="stMetricValue"] {color: #1a1a1a !important; font-size: 2rem !important; font-weight: 600;}
+
+    h1 {color: #1a1a1a; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;}
+    h2 {color: #333; font-size: 1.75rem; font-weight: 600; margin-top: 2rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem;}
+    h3 {color: #444; font-size: 1.25rem; font-weight: 600;}
+
     .metric-card {
-        background: linear-gradient(135deg, #0066CC 0%, #0080FF 100%);
-        padding: 25px;
-        border-radius: 15px;
-        color: white;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        background: white;
+        padding: 1.25rem;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+
+    .status-good {color: #2e7d32; font-weight: 600;}
+    .status-warning {color: #f57c00; font-weight: 600;}
+    .status-critical {color: #c62828; font-weight: 600;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -78,8 +91,8 @@ def generate_historical_data(days=30):
     return pd.DataFrame(data)
 
 # Header
-st.title("📈 GO Transit Analytics Dashboard")
-st.markdown("### Comprehensive Performance Analysis • Daily, Weekly & Monthly Insights")
+st.title("GO Transit Analytics Dashboard")
+st.markdown(f"**Comprehensive Performance Analysis** | {datetime.now().strftime('%B %d, %Y • %H:%M EST')}")
 st.markdown("---")
 
 # Sidebar
@@ -194,10 +207,10 @@ if show_trends:
             y=df_history['performance'],
             mode='lines+markers',
             name='Performance %',
-            line=dict(color='#0066CC', width=3),
+            line=dict(color='#00853E', width=3),
             marker=dict(size=8),
             fill='tozeroy',
-            fillcolor='rgba(0, 102, 204, 0.1)',
+            fillcolor='rgba(0, 133, 62, 0.1)',
             hovertemplate='<b>Date:</b> %{x|%b %d}<br><b>Performance:</b> %{y:.1f}%<extra></extra>'
         ))
 
@@ -217,16 +230,17 @@ if show_trends:
             y=df_history['ma_7'],
             mode='lines',
             name='7-Day Moving Avg',
-            line=dict(color='#1E90FF', width=2, dash='dot'),
+            line=dict(color='#757575', width=2, dash='dot'),
             hovertemplate='<b>7-Day Avg:</b> %{y:.1f}%<extra></extra>'
         ))
 
         fig_daily.update_layout(
             height=450,
             hovermode='x unified',
-            plot_bgcolor='rgba(0,0,0,0.02)',
-            xaxis=dict(title='Date', showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
-            yaxis=dict(title='Performance %', range=[60, 105], showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            xaxis=dict(title='Date', showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
+            yaxis=dict(title='Performance %', range=[60, 105], showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
             legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5)
         )
 
@@ -242,7 +256,7 @@ if show_trends:
                 x=df_history['date'],
                 y=df_history['trains'],
                 name='Trains',
-                marker=dict(color='#0066CC'),
+                marker=dict(color='#00853E'),
                 hovertemplate='Trains: %{y}<extra></extra>'
             ))
 
@@ -250,17 +264,19 @@ if show_trends:
                 x=df_history['date'],
                 y=df_history['buses'],
                 name='Buses',
-                marker=dict(color='#1E90FF'),
+                marker=dict(color='#757575'),
                 hovertemplate='Buses: %{y}<extra></extra>'
             ))
 
             fig_vehicles.update_layout(
-                title='Daily Vehicle Count',
+                title={'text': 'Daily Vehicle Count', 'font': {'color': '#333'}},
                 barmode='stack',
                 height=350,
                 hovermode='x unified',
-                xaxis_title='Date',
-                yaxis_title='Vehicles'
+                plot_bgcolor='white',
+                paper_bgcolor='white',
+                xaxis=dict(title='Date', titlefont=dict(color='#333')),
+                yaxis=dict(title='Vehicles', titlefont=dict(color='#333'))
             )
 
             st.plotly_chart(fig_vehicles, use_container_width=True)
@@ -274,7 +290,7 @@ if show_trends:
                 mode='lines',
                 name='On Time',
                 fill='tonexty',
-                line=dict(color='#4CAF50', width=2),
+                line=dict(color='#2e7d32', width=2),
                 stackgroup='one'
             ))
 
@@ -284,16 +300,18 @@ if show_trends:
                 mode='lines',
                 name='Delayed',
                 fill='tonexty',
-                line=dict(color='#f44336', width=2),
+                line=dict(color='#c62828', width=2),
                 stackgroup='one'
             ))
 
             fig_delays.update_layout(
-                title='On-Time vs Delayed Vehicles',
+                title={'text': 'On-Time vs Delayed Vehicles', 'font': {'color': '#333'}},
                 height=350,
                 hovermode='x unified',
-                xaxis_title='Date',
-                yaxis_title='Vehicles'
+                plot_bgcolor='white',
+                paper_bgcolor='white',
+                xaxis=dict(title='Date', titlefont=dict(color='#333')),
+                yaxis=dict(title='Vehicles', titlefont=dict(color='#333'))
             )
 
             st.plotly_chart(fig_delays, use_container_width=True)

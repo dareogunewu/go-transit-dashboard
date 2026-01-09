@@ -20,33 +20,36 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom theme
+# Professional Executive Theme
 st.markdown("""
     <style>
-    .main {padding: 0rem 1rem;}
+    .main {padding: 0rem 1rem; background-color: #f8f9fa;}
+
     .stMetric {
-        background: linear-gradient(135deg, #0066CC 0%, #0080FF 100%);
-        padding: 20px;
-        border-radius: 10px;
-        color: white;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-    .stMetric label {color: rgba(255,255,255,0.9) !important; font-weight: 600;}
-    .stMetric [data-testid="stMetricValue"] {color: white !important; font-size: 2rem !important;}
-    h1 {
-        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 3rem;
-        font-weight: 800;
-    }
+    .stMetric label {color: #666 !important; font-weight: 500; font-size: 0.875rem !important; text-transform: uppercase; letter-spacing: 0.5px;}
+    .stMetric [data-testid="stMetricValue"] {color: #1a1a1a !important; font-size: 2rem !important; font-weight: 600;}
+
+    h1 {color: #1a1a1a; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;}
+    h2 {color: #333; font-size: 1.75rem; font-weight: 600; margin-top: 2rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem;}
+    h3 {color: #444; font-size: 1.25rem; font-weight: 600;}
+
     .metric-card {
         background: white;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        border-left: 5px solid #0066CC;
+        padding: 1.25rem;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+
+    .status-good {color: #2e7d32; font-weight: 600;}
+    .status-warning {color: #f57c00; font-weight: 600;}
+    .status-critical {color: #c62828; font-weight: 600;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -91,12 +94,8 @@ with st.sidebar:
     st.caption(f"🕐 {datetime.now().strftime('%H:%M:%S')}")
 
 # Header
-col1, col2 = st.columns([3, 1])
-with col1:
-    st.title("🚇 Toronto Transit Command Center")
-    st.markdown("### Real-time monitoring for TTC & GO Transit • Greater Toronto Area")
-with col2:
-    st.metric("System Status", "🟢 OPERATIONAL", delta="All Systems Online")
+st.title("Toronto Transit Network Dashboard")
+st.markdown(f"**Real-time Operations Monitor** | {datetime.now().strftime('%B %d, %Y • %H:%M EST')}")
 
 st.markdown("---")
 
@@ -167,23 +166,23 @@ if show_go:
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
                 value=stats_dict.get('Performance Rate', 0),
-                title={'text': "On-Time Performance", 'font': {'size': 24, 'color': '#0066CC'}},
-                delta={'reference': 95, 'increasing': {'color': '#0066CC'}},
+                title={'text': "On-Time Performance", 'font': {'size': 20, 'color': '#333'}},
+                delta={'reference': 95, 'increasing': {'color': '#2e7d32'}, 'decreasing': {'color': '#c62828'}},
                 number={'suffix': '%', 'font': {'size': 48}},
                 gauge={
-                    'axis': {'range': [None, 100], 'tickwidth': 2},
-                    'bar': {'color': "#0066CC", 'thickness': 0.8},
-                    'bgcolor': "white",
-                    'borderwidth': 2,
-                    'bordercolor': "gray",
+                    'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#666'},
+                    'bar': {'color': "#2e7d32", 'thickness': 0.75},
+                    'bgcolor': "#f5f5f5",
+                    'borderwidth': 1,
+                    'bordercolor': "#e0e0e0",
                     'steps': [
-                        {'range': [0, 70], 'color': '#E3F2FD'},
-                        {'range': [70, 85], 'color': '#BBDEFB'},
-                        {'range': [85, 95], 'color': '#90CAF9'},
-                        {'range': [95, 100], 'color': '#64B5F6'}
+                        {'range': [0, 70], 'color': '#ffebee'},
+                        {'range': [70, 85], 'color': '#fff3e0'},
+                        {'range': [85, 95], 'color': '#e8f5e9'},
+                        {'range': [95, 100], 'color': '#c8e6c9'}
                     ],
                     'threshold': {
-                        'line': {'color': "#1E90FF", 'width': 4},
+                        'line': {'color': "#1a1a1a", 'width': 3},
                         'thickness': 0.75,
                         'value': 95
                     }
@@ -198,7 +197,7 @@ if show_go:
                 labels=['Trains', 'Buses'],
                 values=[stats_dict.get('Trains Active', 0), stats_dict.get('Buses Active', 0)],
                 hole=0.4,
-                marker=dict(colors=['#0066CC', '#1E90FF'], line=dict(color='white', width=2)),
+                marker=dict(colors=['#00853E', '#757575'], line=dict(color='white', width=2)),
                 textinfo='label+value+percent',
                 textfont=dict(size=14, color='white'),
                 hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
@@ -219,19 +218,21 @@ if show_go:
                 x=['On Time', 'Delayed'],
                 y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
                 marker=dict(
-                    color=['#0066CC', '#1E90FF'],
+                    color=['#2e7d32', '#c62828'],
                     line=dict(color='white', width=2)
                 ),
                 text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
                 textposition='outside',
-                textfont=dict(size=16)
+                textfont=dict(size=16, color='#333')
             ))
 
             fig_status.update_layout(
-                title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
+                title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#333'}},
                 height=300,
                 yaxis_title='Vehicles',
                 showlegend=False,
+                plot_bgcolor='white',
+                paper_bgcolor='white',
                 margin=dict(l=40, r=40, t=60, b=40)
             )
             st.plotly_chart(fig_status, use_container_width=True)
@@ -256,7 +257,7 @@ if show_go:
         st.subheader("📈 24-Hour Activity Trends")
 
         fig_ts = go.Figure()
-        colors = ['#0066CC', '#1E90FF', '#4169E1']
+        colors = ['#00853E', '#757575', '#424242']
 
         for idx, series in enumerate(go_timeseries):
             timestamps = [datetime.fromtimestamp(p[1]/1000) for p in series['datapoints']]
@@ -269,16 +270,16 @@ if show_go:
                 name=series['target'],
                 line=dict(width=3, color=colors[idx % len(colors)]),
                 marker=dict(size=6),
-                fill='tonexty' if idx > 0 else None,
                 hovertemplate='<b>%{fullData.name}</b><br>Time: %{x|%H:%M}<br>Value: %{y}<extra></extra>'
             ))
 
         fig_ts.update_layout(
             height=400,
             hovermode='x unified',
-            plot_bgcolor='rgba(0,0,0,0.02)',
-            xaxis=dict(title='Time', showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
-            yaxis=dict(title='Count / Percentage', showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            xaxis=dict(title='Time', showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
+            yaxis=dict(title='Count / Percentage', showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
             legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5),
             margin=dict(l=60, r=40, t=40, b=80)
         )
@@ -308,19 +309,22 @@ if show_ttc:
             fig_severity = go.Figure(go.Indicator(
                 mode="number+gauge",
                 value=critical_pct,
-                title={'text': "Critical Alert Ratio", 'font': {'size': 20, 'color': '#0066CC'}},
-                number={'suffix': '%', 'font': {'size': 36}},
+                title={'text': "Critical Alert Ratio", 'font': {'size': 20, 'color': '#333'}},
+                number={'suffix': '%', 'font': {'size': 36, 'color': '#333'}},
                 gauge={
-                    'axis': {'range': [None, 100]},
-                    'bar': {'color': "#0066CC"},
+                    'axis': {'range': [None, 100], 'tickcolor': '#666'},
+                    'bar': {'color': "#c62828"},
+                    'bgcolor': '#f5f5f5',
+                    'borderwidth': 1,
+                    'bordercolor': '#e0e0e0',
                     'steps': [
-                        {'range': [0, 25], 'color': '#E3F2FD'},
-                        {'range': [25, 50], 'color': '#90CAF9'},
-                        {'range': [50, 100], 'color': '#1E90FF'}
+                        {'range': [0, 25], 'color': '#e8f5e9'},
+                        {'range': [25, 50], 'color': '#fff3e0'},
+                        {'range': [50, 100], 'color': '#ffebee'}
                     ]
                 }
             ))
-            fig_severity.update_layout(height=250)
+            fig_severity.update_layout(height=250, margin=dict(l=20, r=20, t=60, b=20))
             st.plotly_chart(fig_severity, use_container_width=True)
 
         with col2:
@@ -334,13 +338,16 @@ if show_ttc:
             fig_services = go.Figure(data=[go.Pie(
                 labels=[s[0] for s in service_data],
                 values=[s[1] for s in service_data],
-                marker=dict(colors=['#0066CC', '#1E90FF', '#4169E1']),
+                marker=dict(colors=['#757575', '#9e9e9e', '#bdbdbd'], line=dict(color='white', width=2)),
                 textinfo='label+value',
+                textfont=dict(size=14),
                 hole=0.3
             )])
             fig_services.update_layout(
-                title={'text': 'Alerts by Service', 'x': 0.5, 'xanchor': 'center'},
-                height=250
+                title={'text': 'Alerts by Service', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#333'}},
+                height=250,
+                paper_bgcolor='white',
+                plot_bgcolor='white'
             )
             st.plotly_chart(fig_services, use_container_width=True)
 
@@ -365,10 +372,10 @@ if show_ttc:
 # Footer
 st.markdown("---")
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%); border-radius: 10px; color: white;'>
-        <h3>📡 Live Data Feed</h3>
-        <p>TTC GTFS-Realtime • Metrolinx Open API • Powered by Streamlit</p>
-        <p>Last Updated: {}</p>
+    <div style='text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
+        <h3 style='color: #333; margin-bottom: 10px;'>📡 Live Data Feed</h3>
+        <p style='color: #666; margin: 5px 0;'>TTC GTFS-Realtime • Metrolinx Open API • Powered by Streamlit</p>
+        <p style='color: #999; margin: 5px 0; font-size: 0.875rem;'>Last Updated: {}</p>
     </div>
 """.format(datetime.now().strftime("%Y-%m-%d %H:%M:%S EST")), unsafe_allow_html=True)
 

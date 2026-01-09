@@ -13,28 +13,38 @@ from route_data import get_route_name
 
 st.set_page_config(page_title="Vehicle Tracker", page_icon="🔍", layout="wide")
 
+# Professional Executive Theme
 st.markdown("""
     <style>
-    .main {padding: 0rem 1rem;}
-    h1 {
-        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 3rem;
-        font-weight: 800;
+    .main {padding: 0rem 1rem; background-color: #f8f9fa;}
+
+    .stMetric {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+    .stMetric label {color: #666 !important; font-weight: 500; font-size: 0.875rem !important; text-transform: uppercase; letter-spacing: 0.5px;}
+    .stMetric [data-testid="stMetricValue"] {color: #1a1a1a !important; font-size: 2rem !important; font-weight: 600;}
+
+    h1 {color: #1a1a1a; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;}
+    h2 {color: #333; font-size: 1.75rem; font-weight: 600; margin-top: 2rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem;}
+    h3 {color: #444; font-size: 1.25rem; font-weight: 600;}
+
     .search-card {
         background: white;
         padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        border-left: 5px solid #0066CC;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     .vehicle-card {
-        background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%);
+        background: white;
         padding: 15px;
-        border-radius: 10px;
-        color: white;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         margin: 5px 0;
     }
     </style>
@@ -50,8 +60,8 @@ def fetch_data(url):
         return None
 
 # Header
-st.title("🔍 GO Transit Vehicle Tracker")
-st.markdown("### Live Vehicle Monitoring & Advanced Search")
+st.title("GO Transit Vehicle Tracker")
+st.markdown(f"**Live Vehicle Monitoring & Advanced Search** | {datetime.now().strftime('%B %d, %Y • %H:%M EST')}")
 st.markdown("---")
 
 # Sidebar Search Controls
@@ -215,7 +225,7 @@ if show_map and not df_with_location.empty:
             "Latitude": ":.4f",
             "Longitude": ":.4f"
         },
-        color_discrete_map={"Train": "#0066CC", "Bus": "#1E90FF"},
+        color_discrete_map={"Train": "#00853E", "Bus": "#757575"},
         zoom=zoom,
         height=500
     )
@@ -245,7 +255,7 @@ if not df.empty:
             values=status_counts.values,
             hole=0.4,
             marker=dict(
-                colors=['#4CAF50' if 'On Time' in str(s) else '#f44336' if 'Delay' in str(s) else '#FFC107' for s in status_counts.index]
+                colors=['#2e7d32' if 'On Time' in str(s) else '#c62828' if 'Delay' in str(s) else '#f57c00' for s in status_counts.index]
             ),
             textinfo='label+value+percent'
         )])
@@ -373,9 +383,9 @@ else:
 # Footer
 st.markdown("---")
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #0066CC 0%, #1E90FF 100%); border-radius: 10px; color: white;'>
-        <h3>🔍 Vehicle Tracker</h3>
-        <p>Real-time GPS tracking powered by Metrolinx Open API</p>
-        <p>Data refreshes every 60 seconds</p>
+    <div style='text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
+        <h3 style='color: #333; margin-bottom: 10px;'>🔍 Vehicle Tracker</h3>
+        <p style='color: #666; margin: 5px 0;'>Real-time GPS tracking powered by Metrolinx Open API</p>
+        <p style='color: #999; margin: 5px 0; font-size: 0.875rem;'>Data refreshes every 60 seconds</p>
     </div>
 """, unsafe_allow_html=True)
