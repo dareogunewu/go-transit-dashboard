@@ -278,8 +278,8 @@ if show_go:
             hovermode='x unified',
             plot_bgcolor='white',
             paper_bgcolor='white',
-            xaxis=dict(title='Time', showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
-            yaxis=dict(title='Count / Percentage', showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
+            xaxis=dict(title=dict(text='Time', font=dict(color='#333')), showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
+            yaxis=dict(title=dict(text='Count / Percentage', font=dict(color='#333')), showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
             legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5),
             margin=dict(l=60, r=40, t=40, b=80)
         )

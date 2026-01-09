@@ -239,8 +239,8 @@ if show_trends:
             hovermode='x unified',
             plot_bgcolor='white',
             paper_bgcolor='white',
-            xaxis=dict(title='Date', showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
-            yaxis=dict(title='Performance %', range=[60, 105], showgrid=True, gridcolor='rgba(0,0,0,0.1)', titlefont=dict(color='#333')),
+            xaxis=dict(title=dict(text='Date', font=dict(color='#333')), showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
+            yaxis=dict(title=dict(text='Performance %', font=dict(color='#333')), range=[60, 105], showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
             legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5)
         )
 
@@ -275,8 +275,8 @@ if show_trends:
                 hovermode='x unified',
                 plot_bgcolor='white',
                 paper_bgcolor='white',
-                xaxis=dict(title='Date', titlefont=dict(color='#333')),
-                yaxis=dict(title='Vehicles', titlefont=dict(color='#333'))
+                xaxis=dict(title=dict(text='Date', font=dict(color='#333'))),
+                yaxis=dict(title=dict(text='Vehicles', font=dict(color='#333')))
             )
 
             st.plotly_chart(fig_vehicles, use_container_width=True)
@@ -310,8 +310,8 @@ if show_trends:
                 hovermode='x unified',
                 plot_bgcolor='white',
                 paper_bgcolor='white',
-                xaxis=dict(title='Date', titlefont=dict(color='#333')),
-                yaxis=dict(title='Vehicles', titlefont=dict(color='#333'))
+                xaxis=dict(title=dict(text='Date', font=dict(color='#333'))),
+                yaxis=dict(title=dict(text='Vehicles', font=dict(color='#333')))
             )
 
             st.plotly_chart(fig_delays, use_container_width=True)
