@@ -13,39 +13,66 @@ from route_data import get_route_name
 
 st.set_page_config(page_title="Vehicle Tracker", page_icon="🔍", layout="wide")
 
-# Professional Executive Theme
+# Modern Executive Dashboard Theme
 st.markdown("""
     <style>
-    .main {padding: 0rem 1rem; background-color: #f8f9fa;}
+    .main {padding: 2rem 3rem; background-color: #fafbfc;}
 
     .stMetric {
         background: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid #e8eaed;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        transition: all 0.2s ease;
     }
-    .stMetric label {color: #666 !important; font-weight: 500; font-size: 0.875rem !important; text-transform: uppercase; letter-spacing: 0.5px;}
-    .stMetric [data-testid="stMetricValue"] {color: #1a1a1a !important; font-size: 2rem !important; font-weight: 600;}
-
-    h1 {color: #1a1a1a; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;}
-    h2 {color: #333; font-size: 1.75rem; font-weight: 600; margin-top: 2rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem;}
-    h3 {color: #444; font-size: 1.25rem; font-weight: 600;}
-
-    .search-card {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    .stMetric:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
     }
-    .vehicle-card {
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        margin: 5px 0;
+    .stMetric label {
+        color: #5f6368 !important;
+        font-weight: 500;
+        font-size: 0.8125rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 0.5rem !important;
+    }
+    .stMetric [data-testid="stMetricValue"] {
+        color: #202124 !important;
+        font-size: 2.25rem !important;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    h1 {
+        color: #202124;
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        letter-spacing: -0.5px;
+    }
+    h2 {
+        color: #3c4043;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #e8eaed;
+    }
+    h3 {
+        color: #5f6368;
+        font-size: 1.125rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+        color: #5f6368;
+        font-size: 0.875rem;
+        font-weight: 400;
+        margin-top: 0.25rem;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -61,8 +88,8 @@ def fetch_data(url):
 
 # Header
 st.title("GO Transit Vehicle Tracker")
-st.markdown(f"**Live Vehicle Monitoring & Advanced Search** | {datetime.now().strftime('%B %d, %Y • %H:%M EST')}")
-st.markdown("---")
+st.markdown(f"<p class='section-subtitle'>Live Vehicle Monitoring & Advanced Search • {datetime.now().strftime('%B %d, %Y at %H:%M EST')}</p>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 
 # Sidebar Search Controls
 with st.sidebar:

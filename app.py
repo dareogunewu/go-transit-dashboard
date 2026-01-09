@@ -20,36 +20,79 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Professional Executive Theme
+# Modern Executive Dashboard Theme
 st.markdown("""
     <style>
-    .main {padding: 0rem 1rem; background-color: #f8f9fa;}
+    .main {padding: 2rem 3rem; background-color: #fafbfc;}
 
     .stMetric {
         background: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid #e8eaed;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        transition: all 0.2s ease;
     }
-    .stMetric label {color: #666 !important; font-weight: 500; font-size: 0.875rem !important; text-transform: uppercase; letter-spacing: 0.5px;}
-    .stMetric [data-testid="stMetricValue"] {color: #1a1a1a !important; font-size: 2rem !important; font-weight: 600;}
+    .stMetric:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+    .stMetric label {
+        color: #5f6368 !important;
+        font-weight: 500;
+        font-size: 0.8125rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 0.5rem !important;
+    }
+    .stMetric [data-testid="stMetricValue"] {
+        color: #202124 !important;
+        font-size: 2.25rem !important;
+        font-weight: 600;
+        line-height: 1.2;
+    }
 
-    h1 {color: #1a1a1a; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;}
-    h2 {color: #333; font-size: 1.75rem; font-weight: 600; margin-top: 2rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem;}
-    h3 {color: #444; font-size: 1.25rem; font-weight: 600;}
+    h1 {
+        color: #202124;
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        letter-spacing: -0.5px;
+    }
+    h2 {
+        color: #3c4043;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #e8eaed;
+    }
+    h3 {
+        color: #5f6368;
+        font-size: 1.125rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
 
     .metric-card {
         background: white;
-        padding: 1.25rem;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid #e8eaed;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
-    .status-good {color: #2e7d32; font-weight: 600;}
-    .status-warning {color: #f57c00; font-weight: 600;}
-    .status-critical {color: #c62828; font-weight: 600;}
+    .status-good {color: #1e8e3e; font-weight: 500;}
+    .status-warning {color: #e37400; font-weight: 500;}
+    .status-critical {color: #d93025; font-weight: 500;}
+
+    .section-subtitle {
+        color: #5f6368;
+        font-size: 0.875rem;
+        font-weight: 400;
+        margin-top: 0.25rem;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -94,15 +137,15 @@ with st.sidebar:
     st.caption(f"🕐 {datetime.now().strftime('%H:%M:%S')}")
 
 # Header
-st.title("Toronto Transit Network Dashboard")
-st.markdown(f"**Real-time Operations Monitor** | {datetime.now().strftime('%B %d, %Y • %H:%M EST')}")
+st.title("Toronto Transit Network")
+st.markdown(f"<p class='section-subtitle'>Real-time Operations Monitor • {datetime.now().strftime('%B %d, %Y at %H:%M EST')}</p>", unsafe_allow_html=True)
 
-st.markdown("---")
+st.markdown("<br>", unsafe_allow_html=True)
 
 # ============================================================================
 # NETWORK OVERVIEW - Hero Section
 # ============================================================================
-st.header("📊 Network Overview")
+st.header("Network Overview")
 
 col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -152,7 +195,7 @@ st.markdown("---")
 # GO TRANSIT SECTION
 # ============================================================================
 if show_go:
-    st.header("🚆 GO Transit Live Status")
+    st.header("GO Transit Live Status")
 
     go_stats = fetch_data(f"{GO_API}?type=stats")
     if go_stats:
@@ -254,7 +297,7 @@ if show_go:
     # Time Series Trends
     go_timeseries = fetch_data(f"{GO_API}?type=timeseries")
     if go_timeseries:
-        st.subheader("📈 24-Hour Activity Trends")
+        st.subheader("24-Hour Activity Trends")
 
         fig_ts = go.Figure()
         colors = ['#00853E', '#757575', '#424242']
@@ -292,7 +335,7 @@ if show_go:
 # TTC SECTION
 # ============================================================================
 if show_ttc:
-    st.header("🚇 TTC Service Status")
+    st.header("TTC Service Status")
 
     ttc_alerts = fetch_data(f"{TTC_API}/alerts")
     ttc_summary = fetch_data(f"{TTC_API}/summary")
@@ -358,7 +401,7 @@ if show_ttc:
             st.metric("High Severity", summary_dict.get('High Severity', 0))
 
     if ttc_alerts and isinstance(ttc_alerts, list) and len(ttc_alerts) > 0:
-        st.subheader("🚨 Active Service Disruptions")
+        st.subheader("Active Service Disruptions")
         df_ttc = pd.DataFrame(ttc_alerts).head(15)
 
         def highlight_severity(row):
@@ -370,14 +413,17 @@ if show_ttc:
         st.dataframe(styled_df, use_container_width=True, height=400)
 
 # Footer
-st.markdown("---")
+st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
-        <h3 style='color: #333; margin-bottom: 10px;'>📡 Live Data Feed</h3>
-        <p style='color: #666; margin: 5px 0;'>TTC GTFS-Realtime • Metrolinx Open API • Powered by Streamlit</p>
-        <p style='color: #999; margin: 5px 0; font-size: 0.875rem;'>Last Updated: {}</p>
+    <div style='text-align: center; padding: 2rem 0; border-top: 1px solid #e8eaed; margin-top: 3rem;'>
+        <p style='color: #5f6368; font-size: 0.8125rem; margin: 0;'>
+            Data Sources: TTC GTFS-Realtime • Metrolinx Open API
+        </p>
+        <p style='color: #9aa0a6; font-size: 0.75rem; margin-top: 0.5rem;'>
+            Last Updated: {} • Auto-refresh: 60s
+        </p>
     </div>
-""".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S EST")), unsafe_allow_html=True)
+""".format(datetime.now().strftime("%Y-%m-%d %H:%M EST")), unsafe_allow_html=True)
 
 # Auto-refresh
 if auto_refresh:
