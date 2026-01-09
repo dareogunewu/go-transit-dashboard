@@ -20,78 +20,99 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Modern Executive Dashboard Theme
+# Ultra-Modern SaaS Dashboard Theme
 st.markdown("""
     <style>
-    .main {padding: 2rem 3rem; background-color: #fafbfc;}
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-    .stMetric {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        border: 1px solid #e8eaed;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        transition: all 0.2s ease;
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    .stMetric:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transform: translateY(-2px);
+
+    .main {
+        padding: 1.5rem 2.5rem;
+        background-color: #f7f8fa;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    /* Clean metric cards - no individual borders */
+    .stMetric {
+        background: transparent;
+        padding: 0;
+        border: none;
+        box-shadow: none;
     }
     .stMetric label {
-        color: #5f6368 !important;
+        color: #64748b !important;
         font-weight: 500;
-        font-size: 0.8125rem !important;
+        font-size: 0.75rem !important;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.5px;
         margin-bottom: 0.5rem !important;
     }
     .stMetric [data-testid="stMetricValue"] {
-        color: #202124 !important;
-        font-size: 2.25rem !important;
-        font-weight: 600;
-        line-height: 1.2;
+        color: #0f172a !important;
+        font-size: 1.875rem !important;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .stMetric [data-testid="stMetricDelta"] {
+        font-size: 0.8125rem !important;
     }
 
+    /* Typography */
     h1 {
-        color: #202124;
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-        letter-spacing: -0.5px;
+        color: #0f172a;
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
     }
     h2 {
-        color: #3c4043;
-        font-size: 1.5rem;
-        font-weight: 500;
-        margin-top: 3rem;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid #e8eaed;
+        color: #1e293b;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 2.5rem;
+        margin-bottom: 1.25rem;
+        letter-spacing: -0.01em;
     }
     h3 {
-        color: #5f6368;
-        font-size: 1.125rem;
-        font-weight: 500;
+        color: #475569;
+        font-size: 1rem;
+        font-weight: 600;
         margin-bottom: 1rem;
     }
 
-    .metric-card {
+    /* Card container styling */
+    .element-container:has(> .stPlotlyChart) {
         background: white;
+        border-radius: 16px;
         padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid #e8eaed;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
     }
 
-    .status-good {color: #1e8e3e; font-weight: 500;}
-    .status-warning {color: #e37400; font-weight: 500;}
-    .status-critical {color: #d93025; font-weight: 500;}
-
+    /* Section subtitle */
     .section-subtitle {
-        color: #5f6368;
+        color: #64748b;
         font-size: 0.875rem;
         font-weight: 400;
         margin-top: 0.25rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Remove default streamlit padding */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    /* Custom divider */
+    hr {
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid #e2e8f0;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -147,6 +168,12 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ============================================================================
 st.header("Network Overview")
 
+# Metrics card container
+st.markdown("""
+    <div style='background: white; border-radius: 16px; padding: 1.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 1.5rem;'>
+""", unsafe_allow_html=True)
+
 col1, col2, col3, col4, col5 = st.columns(5)
 
 if show_go:
@@ -189,7 +216,9 @@ if show_ttc:
             st.metric("🚇 TTC Services", total_services,
                      delta=f"{summary_dict.get('Subway', 0)} subway")
 
-st.markdown("---")
+st.markdown("</div>", unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
 
 # ============================================================================
 # GO TRANSIT SECTION
@@ -281,18 +310,12 @@ if show_go:
             st.plotly_chart(fig_status, use_container_width=True)
 
         with col4:
-            # Key Metrics Cards
-            st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+            # Key Metrics
             st.metric("Total Vehicles", stats_dict.get('Total Vehicles', 0))
-            st.markdown('</div>', unsafe_allow_html=True)
-
-            st.markdown('<div class="metric-card" style="margin-top:10px;">', unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
             st.metric("Train Lines", stats_dict.get('Train Lines', 0))
-            st.markdown('</div>', unsafe_allow_html=True)
-
-            st.markdown('<div class="metric-card" style="margin-top:10px;">', unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
             st.metric("Bus Routes", stats_dict.get('Bus Routes', 0))
-            st.markdown('</div>', unsafe_allow_html=True)
 
     # Time Series Trends
     go_timeseries = fetch_data(f"{GO_API}?type=timeseries")
@@ -415,15 +438,15 @@ if show_ttc:
 # Footer
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style='text-align: center; padding: 2rem 0; border-top: 1px solid #e8eaed; margin-top: 3rem;'>
-        <p style='color: #5f6368; font-size: 0.8125rem; margin: 0;'>
-            Data Sources: TTC GTFS-Realtime • Metrolinx Open API
+    <div style='text-align: center; padding: 1.5rem 0; border-top: 1px solid #e2e8f0; margin-top: 2.5rem;'>
+        <p style='color: #64748b; font-size: 0.8125rem; margin: 0; font-weight: 500;'>
+            TTC GTFS-Realtime • Metrolinx Open API
         </p>
-        <p style='color: #9aa0a6; font-size: 0.75rem; margin-top: 0.5rem;'>
-            Last Updated: {} • Auto-refresh: 60s
+        <p style='color: #94a3b8; font-size: 0.75rem; margin-top: 0.375rem;'>
+            Last updated {} • Refreshes every 60s
         </p>
     </div>
-""".format(datetime.now().strftime("%Y-%m-%d %H:%M EST")), unsafe_allow_html=True)
+""".format(datetime.now().strftime("%H:%M EST")), unsafe_allow_html=True)
 
 # Auto-refresh
 if auto_refresh:
