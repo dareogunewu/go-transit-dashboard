@@ -18,14 +18,14 @@ st.markdown("""
     <style>
     .main {padding: 0rem 1rem;}
     h1 {
-        background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+        background: linear-gradient(135deg, #00853E 0%, #0066CC 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 3rem;
         font-weight: 800;
     }
     .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #00853E 0%, #00A651 100%);
         padding: 25px;
         border-radius: 15px;
         color: white;
@@ -545,7 +545,7 @@ if show_insights:
 
     with insights_col1:
         st.markdown("""
-        <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; border-radius: 15px; color: white;'>
+        <div style='background: linear-gradient(135deg, #00853E 0%, #00A651 100%); padding: 25px; border-radius: 15px; color: white;'>
             <h3>📊 Performance Insights</h3>
             <ul>
                 <li>Average performance: <b>{:.1f}%</b> ({} vs 95% target)</li>
@@ -564,7 +564,7 @@ if show_insights:
 
     with insights_col2:
         st.markdown("""
-        <div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 25px; border-radius: 15px; color: white;'>
+        <div style='background: linear-gradient(135deg, #0066CC 0%, #0080FF 100%); padding: 25px; border-radius: 15px; color: white;'>
             <h3>🎯 Recommendations</h3>
             <ul>
                 <li>Focus on routes with <80% on-time rate</li>

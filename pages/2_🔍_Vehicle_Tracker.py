@@ -17,7 +17,7 @@ st.markdown("""
     <style>
     .main {padding: 0rem 1rem;}
     h1 {
-        background: linear-gradient(135deg, #0066CC 0%, #00853E 100%);
+        background: linear-gradient(135deg, #00853E 0%, #0066CC 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 3rem;
@@ -28,10 +28,10 @@ st.markdown("""
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        border-left: 5px solid #0066CC;
+        border-left: 5px solid #00853E;
     }
     .vehicle-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #00853E 0%, #00A651 100%);
         padding: 15px;
         border-radius: 10px;
         color: white;
@@ -373,9 +373,9 @@ else:
 # Footer
 st.markdown("---")
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #0066CC 0%, #00853E 100%); border-radius: 10px; color: white;'>
+    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #00853E 0%, #0066CC 100%); border-radius: 10px; color: white;'>
         <h3>🔍 Vehicle Tracker</h3>
         <p>Real-time GPS tracking powered by Metrolinx Open API</p>
         <p>Data refreshes every 60 seconds</p>
     </div>
-""".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S EST")), unsafe_allow_html=True)
+""", unsafe_allow_html=True)

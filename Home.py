@@ -25,7 +25,7 @@ st.markdown("""
     <style>
     .main {padding: 0rem 1rem;}
     .stMetric {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #00853E 0%, #00A651 100%);
         padding: 20px;
         border-radius: 10px;
         color: white;
@@ -361,7 +361,7 @@ if show_ttc:
 # Footer
 st.markdown("---")
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;'>
+    <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #00853E 0%, #0066CC 100%); border-radius: 10px; color: white;'>
         <h3>📡 Live Data Feed</h3>
         <p>TTC GTFS-Realtime • Metrolinx Open API • Powered by Streamlit</p>
         <p>Last Updated: {}</p>
