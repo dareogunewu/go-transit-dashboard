@@ -29,9 +29,9 @@ st.markdown("""
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    /* Premium gradient background */
+    /* Bright gradient background */
     .stApp {
-        background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1629 100%);
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
     }
 
     .main {
@@ -40,61 +40,60 @@ st.markdown("""
         margin: 0 auto;
     }
 
-    /* Glass-morphism metric cards */
+    /* Bright vibrant metric cards */
     .stMetric {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%) !important;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(59, 130, 246, 0.2) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%) !important;
+        border: 2px solid #e0e7ff !important;
         border-radius: 16px !important;
         padding: 1.25rem 1rem !important;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15) !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         min-height: 120px;
     }
     .stMetric:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25) !important;
-        border-color: rgba(59, 130, 246, 0.4) !important;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(59, 130, 246, 0.25) !important;
+        border-color: #3b82f6 !important;
     }
     .stMetric label {
-        color: #94a3b8 !important;
-        font-weight: 600 !important;
+        color: #6366f1 !important;
+        font-weight: 700 !important;
         font-size: 0.7rem !important;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.2px;
         margin-bottom: 0.5rem !important;
         display: block !important;
     }
     .stMetric [data-testid="stMetricValue"] {
-        color: #f8fafc !important;
+        color: #1e293b !important;
         font-size: 2rem !important;
-        font-weight: 700 !important;
+        font-weight: 800 !important;
         line-height: 1.2 !important;
         margin: 0.25rem 0 !important;
         display: block !important;
     }
     .stMetric [data-testid="stMetricDelta"] {
         font-size: 0.8rem !important;
-        font-weight: 500 !important;
+        font-weight: 600 !important;
         margin-top: 0.25rem !important;
+        color: #64748b !important;
     }
 
-    /* Premium typography */
+    /* Bright typography */
     h1 {
-        color: #f8fafc;
+        color: #0f172a;
         font-size: 3rem;
-        font-weight: 800;
+        font-weight: 900;
         margin-bottom: 0.5rem;
         letter-spacing: -0.03em;
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 80px rgba(59, 130, 246, 0.5);
     }
     h2 {
-        color: #e2e8f0;
+        color: #1e293b;
         font-size: 1.75rem;
-        font-weight: 700;
+        font-weight: 800;
         margin: 3rem 0 1.5rem 0;
         position: relative;
         padding-bottom: 1rem;
@@ -104,32 +103,32 @@ st.markdown("""
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 60px;
-        height: 4px;
+        width: 80px;
+        height: 5px;
         background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
-        border-radius: 2px;
+        border-radius: 3px;
     }
     h3 {
-        color: #cbd5e1;
+        color: #334155;
         font-size: 1.125rem;
-        font-weight: 600;
+        font-weight: 700;
         margin-bottom: 1rem;
     }
 
-    /* Premium card containers */
+    /* Bright card containers */
     .element-container:has(> .stPlotlyChart) {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(59, 130, 246, 0.15);
+        background: #ffffff;
+        border: 2px solid #e0e7ff;
         border-radius: 16px;
-        padding: 1.25rem;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
         transition: all 0.3s ease;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
     }
     .element-container:has(> .stPlotlyChart):hover {
-        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
-        border-color: rgba(59, 130, 246, 0.25);
+        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+        border-color: #c7d2fe;
+        transform: translateY(-2px);
     }
 
     /* Fix column gaps */
@@ -154,44 +153,45 @@ st.markdown("""
 
     /* Section subtitle */
     .section-subtitle {
-        color: #94a3b8;
+        color: #64748b;
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         margin-top: 0.5rem;
         margin-bottom: 2.5rem;
         letter-spacing: 0.3px;
     }
 
-    /* Glowing divider */
+    /* Bright divider */
     hr {
         margin: 3rem 0;
         border: none;
-        height: 2px;
+        height: 3px;
         background: linear-gradient(90deg, transparent 0%, #3b82f6 50%, transparent 100%);
-        opacity: 0.3;
+        opacity: 0.4;
     }
 
-    /* Premium sidebar */
+    /* Bright sidebar */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-        border-right: 1px solid rgba(59, 130, 246, 0.2);
-        box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        border-right: 2px solid #e0e7ff;
+        box-shadow: 4px 0 24px rgba(99, 102, 241, 0.1);
     }
     [data-testid="stSidebar"] * {
-        color: #e2e8f0 !important;
+        color: #1e293b !important;
     }
     [data-testid="stSidebar"] .stButton button {
         background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         border: none;
-        color: white;
-        font-weight: 600;
+        color: white !important;
+        font-weight: 700;
         border-radius: 12px;
         padding: 0.75rem 1.5rem;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
     [data-testid="stSidebar"] .stButton button:hover {
         transform: scale(1.05);
-        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
     }
 
     /* Code/monospace font for metrics */
@@ -269,12 +269,13 @@ with st.sidebar:
     st.caption("• Metrolinx Open API")
     st.caption(f"🕐 {datetime.now().strftime('%H:%M:%S')}")
 
-# Premium Header with Stats Badge
+# Bright Header with Stats Badge
 st.markdown("""
     <div style='text-align: center; padding: 2rem 0 1rem 0;'>
-        <div style='display: inline-block; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
-        border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 50px; padding: 0.5rem 1.5rem; margin-bottom: 1rem;'>
-            <span style='color: #3b82f6; font-weight: 600; font-size: 0.875rem; letter-spacing: 1px;'>🚆 LIVE OPERATIONS</span>
+        <div style='display: inline-block; background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+        border: 2px solid #3b82f6; border-radius: 50px; padding: 0.6rem 1.8rem; margin-bottom: 1rem;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);'>
+            <span style='color: #1e40af; font-weight: 800; font-size: 0.875rem; letter-spacing: 1.5px;'>🚆 LIVE OPERATIONS</span>
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -374,9 +375,9 @@ if go_stats:
         fig_gauge.update_layout(
             height=320,
             margin=dict(l=10, r=10, t=80, b=10),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#e2e8f0', family='Plus Jakarta Sans')
+            paper_bgcolor='#ffffff',
+            plot_bgcolor='#ffffff',
+            font=dict(color='#1e293b', family='Plus Jakarta Sans')
         )
         st.plotly_chart(fig_gauge, use_container_width=True)
 
@@ -395,7 +396,7 @@ if go_stats:
             hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
         )])
         fig_fleet.update_layout(
-            title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#e2e8f0', 'family': 'Plus Jakarta Sans'}},
+            title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#1e293b', 'family': 'Plus Jakarta Sans'}},
             height=320,
             showlegend=True,
             legend=dict(
@@ -404,11 +405,11 @@ if go_stats:
                 y=-0.15,
                 xanchor="center",
                 x=0.5,
-                font=dict(color='#cbd5e1', size=12, family='Plus Jakarta Sans')
+                font=dict(color='#334155', size=12, family='Plus Jakarta Sans')
             ),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#e2e8f0', family='Plus Jakarta Sans')
+            paper_bgcolor='#ffffff',
+            plot_bgcolor='#ffffff',
+            font=dict(color='#1e293b', family='Plus Jakarta Sans')
         )
         st.plotly_chart(fig_fleet, use_container_width=True)
 
@@ -430,52 +431,55 @@ if go_stats:
         ))
 
         fig_status.update_layout(
-            title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#e2e8f0', 'family': 'Plus Jakarta Sans'}},
+            title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#1e293b', 'family': 'Plus Jakarta Sans'}},
             height=320,
             yaxis=dict(
                 title='Vehicles',
-                color='#94a3b8',
-                gridcolor='rgba(148, 163, 184, 0.1)',
-                tickfont=dict(color='#cbd5e1', family='Plus Jakarta Sans')
+                color='#64748b',
+                gridcolor='#e2e8f0',
+                tickfont=dict(color='#334155', family='Plus Jakarta Sans')
             ),
             xaxis=dict(
-                color='#cbd5e1',
-                tickfont=dict(color='#cbd5e1', size=13, family='Plus Jakarta Sans', weight=600)
+                color='#334155',
+                tickfont=dict(color='#334155', size=13, family='Plus Jakarta Sans', weight=600)
             ),
             showlegend=False,
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#e2e8f0', family='Plus Jakarta Sans'),
+            plot_bgcolor='#ffffff',
+            paper_bgcolor='#ffffff',
+            font=dict(color='#1e293b', family='Plus Jakarta Sans'),
             margin=dict(l=50, r=30, t=80, b=50)
         )
         st.plotly_chart(fig_status, use_container_width=True)
 
     with col4:
-        # Key Metrics - Premium Cards (Fixed spacing)
+        # Key Metrics - Bright Cards
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem;'>
-                <div style='color: #94a3b8; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.4rem;'>Total Fleet</div>
-                <div style='color: #f8fafc; font-size: 1.75rem; font-weight: 700; line-height: 1.2;'>{stats_dict.get('Total Vehicles', 0)}</div>
-                <div style='color: #3b82f6; font-size: 0.75rem; font-weight: 500; margin-top: 0.4rem;'>● Active Now</div>
+            <div style='background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            border: 2px solid #93c5fd; border-radius: 14px; padding: 1.2rem; margin-bottom: 0.8rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);'>
+                <div style='color: #1e40af; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Total Fleet</div>
+                <div style='color: #0f172a; font-size: 1.9rem; font-weight: 900; line-height: 1.2;'>{stats_dict.get('Total Vehicles', 0)}</div>
+                <div style='color: #2563eb; font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem;'>● Active Now</div>
             </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem;'>
-                <div style='color: #94a3b8; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.4rem;'>Train Lines</div>
-                <div style='color: #f8fafc; font-size: 1.75rem; font-weight: 700; line-height: 1.2;'>{stats_dict.get('Train Lines', 0)}</div>
-                <div style='color: #10b981; font-size: 0.75rem; font-weight: 500; margin-top: 0.4rem;'>● Operational</div>
+            <div style='background: linear-gradient(135deg, #d1fae5 0%, #dbeafe 100%);
+            border: 2px solid #6ee7b7; border-radius: 14px; padding: 1.2rem; margin-bottom: 0.8rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);'>
+                <div style='color: #065f46; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Train Lines</div>
+                <div style='color: #0f172a; font-size: 1.9rem; font-weight: 900; line-height: 1.2;'>{stats_dict.get('Train Lines', 0)}</div>
+                <div style='color: #059669; font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem;'>● Operational</div>
             </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 12px; padding: 1rem;'>
-                <div style='color: #94a3b8; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.4rem;'>Bus Routes</div>
-                <div style='color: #f8fafc; font-size: 1.75rem; font-weight: 700; line-height: 1.2;'>{stats_dict.get('Bus Routes', 0)}</div>
-                <div style='color: #8b5cf6; font-size: 0.75rem; font-weight: 500; margin-top: 0.4rem;'>● In Service</div>
+            <div style='background: linear-gradient(135deg, #e9d5ff 0%, #fae8ff 100%);
+            border: 2px solid #d8b4fe; border-radius: 14px; padding: 1.2rem;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);'>
+                <div style='color: #6b21a8; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Bus Routes</div>
+                <div style='color: #0f172a; font-size: 1.9rem; font-weight: 900; line-height: 1.2;'>{stats_dict.get('Bus Routes', 0)}</div>
+                <div style='color: #7c3aed; font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem;'>● In Service</div>
             </div>
         """, unsafe_allow_html=True)
 
@@ -509,21 +513,21 @@ if go_stats:
         fig_ts.update_layout(
             height=450,
             hovermode='x unified',
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='#ffffff',
+            paper_bgcolor='#ffffff',
             xaxis=dict(
-                title=dict(text='Time', font=dict(color='#e2e8f0', size=14, family='Plus Jakarta Sans')),
+                title=dict(text='Time', font=dict(color='#1e293b', size=14, family='Plus Jakarta Sans')),
                 showgrid=True,
-                gridcolor='rgba(148, 163, 184, 0.1)',
-                color='#cbd5e1',
-                tickfont=dict(color='#94a3b8', family='Plus Jakarta Sans')
+                gridcolor='#e2e8f0',
+                color='#334155',
+                tickfont=dict(color='#64748b', family='Plus Jakarta Sans')
             ),
             yaxis=dict(
-                title=dict(text='Count / Percentage', font=dict(color='#e2e8f0', size=14, family='Plus Jakarta Sans')),
+                title=dict(text='Count / Percentage', font=dict(color='#1e293b', size=14, family='Plus Jakarta Sans')),
                 showgrid=True,
-                gridcolor='rgba(148, 163, 184, 0.1)',
-                color='#cbd5e1',
-                tickfont=dict(color='#94a3b8', family='Plus Jakarta Sans')
+                gridcolor='#e2e8f0',
+                color='#334155',
+                tickfont=dict(color='#64748b', family='Plus Jakarta Sans')
             ),
             legend=dict(
                 orientation="h",
@@ -531,38 +535,39 @@ if go_stats:
                 y=-0.12,
                 xanchor="center",
                 x=0.5,
-                font=dict(color='#cbd5e1', size=13, family='Plus Jakarta Sans'),
-                bgcolor='rgba(255,255,255,0.05)',
-                bordercolor='rgba(255,255,255,0.1)',
-                borderwidth=1
+                font=dict(color='#334155', size=13, family='Plus Jakarta Sans'),
+                bgcolor='#f8fafc',
+                bordercolor='#e0e7ff',
+                borderwidth=2
             ),
-            font=dict(color='#e2e8f0', family='Plus Jakarta Sans'),
+            font=dict(color='#1e293b', family='Plus Jakarta Sans'),
             margin=dict(l=70, r=40, t=50, b=90)
         )
 
         st.plotly_chart(fig_ts, use_container_width=True)
 
 
-# Premium Footer
+# Bright Footer
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
     <div style='text-align: center; padding: 2.5rem 0; margin-top: 3rem;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-    border-top: 2px solid rgba(59, 130, 246, 0.2);
-    border-radius: 20px 20px 0 0;'>
-        <div style='color: #94a3b8; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.75rem;'>
+    background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+    border-top: 3px solid #3b82f6;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);'>
+        <div style='color: #1e40af; font-size: 0.875rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem;'>
             ⚡ POWERED BY
         </div>
-        <div style='background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        <div style='background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem;'>
+        font-size: 1.25rem; font-weight: 900; margin-bottom: 1rem;'>
             Metrolinx Open API
         </div>
-        <div style='color: #64748b; font-size: 0.8125rem; font-weight: 500;'>
+        <div style='color: #475569; font-size: 0.875rem; font-weight: 600;'>
             🔄 Live Updates Every 60s • Last Refresh: {} EST
         </div>
-        <div style='margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(148, 163, 184, 0.15);'>
-            <div style='color: #475569; font-size: 0.75rem;'>
+        <div style='margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid rgba(59, 130, 246, 0.2);'>
+            <div style='color: #64748b; font-size: 0.75rem; font-weight: 600;'>
                 Built with Streamlit • Real-time Transit Intelligence
             </div>
         </div>
