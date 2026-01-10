@@ -20,113 +20,197 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Grafana-Style Dark Theme
+# Modern Premium Dashboard Theme
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
     * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Premium gradient background */
+    .stApp {
+        background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1629 100%);
     }
 
     .main {
-        padding: 2rem 2rem;
-        background-color: #181b1f;
-        max-width: 1600px;
+        padding: 2.5rem 3rem;
+        max-width: 1800px;
         margin: 0 auto;
     }
 
-    /* Override Streamlit default backgrounds */
-    .stApp {
-        background-color: #181b1f;
-    }
-
-    /* Metric cards - dark theme */
+    /* Glass-morphism metric cards */
     .stMetric {
-        background: transparent;
-        padding: 0;
-        border: none;
-        box-shadow: none;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 20px;
+        padding: 2rem 1.5rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stMetric:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 48px rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
     }
     .stMetric label {
-        color: #9fa3a8 !important;
-        font-weight: 500;
+        color: #94a3b8 !important;
+        font-weight: 600 !important;
         font-size: 0.75rem !important;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.5rem !important;
+        letter-spacing: 1.2px;
     }
     .stMetric [data-testid="stMetricValue"] {
-        color: #d8d9da !important;
-        font-size: 1.875rem !important;
-        font-weight: 600;
-        line-height: 1;
+        color: #f8fafc !important;
+        font-size: 2.25rem !important;
+        font-weight: 800 !important;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     .stMetric [data-testid="stMetricDelta"] {
-        font-size: 0.8125rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
     }
 
-    /* Typography - dark theme */
+    /* Premium typography */
     h1 {
-        color: #d8d9da;
-        font-size: 1.875rem;
-        font-weight: 600;
+        color: #f8fafc;
+        font-size: 3rem;
+        font-weight: 800;
         margin-bottom: 0.5rem;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.03em;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 80px rgba(59, 130, 246, 0.5);
     }
     h2 {
-        color: #d8d9da;
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-top: 2.5rem;
-        margin-bottom: 1.25rem;
-        letter-spacing: -0.01em;
+        color: #e2e8f0;
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 3rem 0 1.5rem 0;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+        border-radius: 2px;
     }
     h3 {
-        color: #c4c7cc;
-        font-size: 1rem;
-        font-weight: 500;
+        color: #cbd5e1;
+        font-size: 1.125rem;
+        font-weight: 600;
         margin-bottom: 1rem;
     }
 
-    /* Card container styling - dark panels */
+    /* Premium card containers */
     .element-container:has(> .stPlotlyChart) {
-        background: #242629;
-        border-radius: 8px;
-        padding: 1.25rem;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-        border: 1px solid #2e3034;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+        transition: all 0.3s ease;
     }
+    .element-container:has(> .stPlotlyChart):hover {
+        box-shadow: 0 12px 48px rgba(59, 130, 246, 0.2);
+        border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    /* Accent colors */
+    .accent-blue { color: #3b82f6; }
+    .accent-purple { color: #8b5cf6; }
+    .accent-pink { color: #ec4899; }
+    .accent-green { color: #10b981; }
+    .accent-orange { color: #f59e0b; }
 
     /* Section subtitle */
     .section-subtitle {
-        color: #9fa3a8;
-        font-size: 0.875rem;
-        font-weight: 400;
-        margin-top: 0.25rem;
-        margin-bottom: 2rem;
+        color: #94a3b8;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-top: 0.5rem;
+        margin-bottom: 2.5rem;
+        letter-spacing: 0.3px;
     }
 
-    /* Remove default streamlit padding */
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-
-    /* Custom divider - dark */
+    /* Glowing divider */
     hr {
-        margin: 2rem 0;
+        margin: 3rem 0;
         border: none;
-        border-top: 1px solid #2e3034;
+        height: 2px;
+        background: linear-gradient(90deg, transparent 0%, #3b82f6 50%, transparent 100%);
+        opacity: 0.3;
     }
 
-    /* Sidebar dark theme */
+    /* Premium sidebar */
     [data-testid="stSidebar"] {
-        background-color: #1f2226;
-        border-right: 1px solid #2e3034;
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        border-right: 1px solid rgba(59, 130, 246, 0.2);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.5);
     }
     [data-testid="stSidebar"] * {
-        color: #d8d9da !important;
+        color: #e2e8f0 !important;
+    }
+    [data-testid="stSidebar"] .stButton button {
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    [data-testid="stSidebar"] .stButton button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Code/monospace font for metrics */
+    .metric-value {
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .main > div {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #1e293b;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -167,52 +251,64 @@ with st.sidebar:
     st.caption("• Metrolinx Open API")
     st.caption(f"🕐 {datetime.now().strftime('%H:%M:%S')}")
 
-# Header
-st.title("GO Transit Command Center")
-st.markdown(f"<p class='section-subtitle'>Real-time Operations Monitor • {datetime.now().strftime('%B %d, %Y at %H:%M EST')}</p>", unsafe_allow_html=True)
+# Premium Header with Stats Badge
+st.markdown("""
+    <div style='text-align: center; padding: 2rem 0 1rem 0;'>
+        <div style='display: inline-block; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 50px; padding: 0.5rem 1.5rem; margin-bottom: 1rem;'>
+            <span style='color: #3b82f6; font-weight: 600; font-size: 0.875rem; letter-spacing: 1px;'>🚆 LIVE OPERATIONS</span>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
-st.markdown("<br>", unsafe_allow_html=True)
+st.title("GO Transit Command Center")
+st.markdown(f"<p class='section-subtitle'>Real-time Performance Analytics • {datetime.now().strftime('%B %d, %Y at %H:%M EST')}</p>", unsafe_allow_html=True)
 
 # ============================================================================
 # NETWORK OVERVIEW - Hero Section
 # ============================================================================
 st.header("Network Overview")
 
-# Metrics card container - dark panel
-st.markdown("""
-    <div style='background: #242629; border-radius: 8px; padding: 1.75rem;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.3); border: 1px solid #2e3034; margin-bottom: 1.5rem;'>
-""", unsafe_allow_html=True)
-
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 
 go_stats = fetch_data(f"{GO_API}?type=stats")
 if go_stats and isinstance(go_stats, list) and len(go_stats) > 0:
     stats_dict = {i['metric']: i['value'] for i in go_stats}
 else:
-    st.warning("Unable to load GO Transit statistics")
+    st.warning("⚠️ Unable to load GO Transit statistics")
     stats_dict = {}
 
 if stats_dict:
     with col1:
         st.metric(
-            "🚆 Performance",
+            "System Performance",
             f"{stats_dict.get('Performance Rate', 0)}%",
             delta=f"{stats_dict.get('Performance Rate', 0) - 95}% vs target",
             delta_color="normal" if stats_dict.get('Performance Rate', 0) >= 95 else "inverse"
         )
 
     with col2:
-        st.metric("🚊 Active Vehicles", stats_dict.get('Total Vehicles', 0),
-                 delta=f"{stats_dict.get('Trains in Motion', 0) + stats_dict.get('Buses in Motion', 0)} moving")
+        st.metric(
+            "Active Fleet",
+            stats_dict.get('Total Vehicles', 0),
+            delta=f"{stats_dict.get('Trains in Motion', 0) + stats_dict.get('Buses in Motion', 0)} in motion"
+        )
 
     with col3:
-        st.metric("✅ On Time", stats_dict.get('On Time', 0),
-                 delta=f"{round(stats_dict.get('On Time', 0) / stats_dict.get('Total Vehicles', 1) * 100)}%")
+        st.metric(
+            "On-Time Vehicles",
+            stats_dict.get('On Time', 0),
+            delta=f"{round(stats_dict.get('On Time', 0) / stats_dict.get('Total Vehicles', 1) * 100)}%"
+        )
 
-st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
+    with col4:
+        delayed_pct = round((stats_dict.get('Delayed', 0) / stats_dict.get('Total Vehicles', 1) * 100))
+        st.metric(
+            "Delayed Vehicles",
+            stats_dict.get('Delayed', 0),
+            delta=f"{delayed_pct}%",
+            delta_color="inverse"
+        )
 
 # ============================================================================
 # GO TRANSIT SECTION
@@ -227,107 +323,148 @@ if go_stats:
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        # Performance Gauge - Dark Theme
+        # Performance Gauge - Premium Theme
+        perf_value = stats_dict.get('Performance Rate', 0)
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number+delta",
-            value=stats_dict.get('Performance Rate', 0),
-            title={'text': "On-Time Performance", 'font': {'size': 18, 'color': '#d8d9da'}},
-            delta={'reference': 95, 'increasing': {'color': '#73bf69'}, 'decreasing': {'color': '#ff5705'}},
-            number={'suffix': '%', 'font': {'size': 44, 'color': '#d8d9da'}},
+            value=perf_value,
+            title={'text': "On-Time Performance", 'font': {'size': 20, 'color': '#e2e8f0', 'family': 'Plus Jakarta Sans'}},
+            delta={'reference': 95, 'increasing': {'color': '#10b981'}, 'decreasing': {'color': '#f59e0b'}},
+            number={'suffix': '%', 'font': {'size': 48, 'color': '#f8fafc', 'family': 'Plus Jakarta Sans'}},
             gauge={
-                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#9fa3a8'},
-                'bar': {'color': "#73bf69", 'thickness': 0.75},
-                'bgcolor': "#1a1d21",
-                'borderwidth': 1,
-                'bordercolor': "#2e3034",
+                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#64748b', 'tickfont': {'color': '#94a3b8'}},
+                'bar': {'color': "#3b82f6", 'thickness': 0.8},
+                'bgcolor': "rgba(15, 23, 42, 0.5)",
+                'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 70], 'color': '#3d2c2c'},
-                    {'range': [70, 85], 'color': '#3d3420'},
-                    {'range': [85, 95], 'color': '#2a3a2c'},
-                    {'range': [95, 100], 'color': '#2f4f2f'}
+                    {'range': [0, 70], 'color': 'rgba(239, 68, 68, 0.2)'},
+                    {'range': [70, 85], 'color': 'rgba(245, 158, 11, 0.2)'},
+                    {'range': [85, 95], 'color': 'rgba(59, 130, 246, 0.2)'},
+                    {'range': [95, 100], 'color': 'rgba(16, 185, 129, 0.3)'}
                 ],
                 'threshold': {
-                    'line': {'color': "#d8d9da", 'width': 3},
-                    'thickness': 0.75,
+                    'line': {'color': "#8b5cf6", 'width': 4},
+                    'thickness': 0.8,
                     'value': 95
                 }
             }
         ))
         fig_gauge.update_layout(
-            height=300,
-            margin=dict(l=20, r=20, t=60, b=20),
-            paper_bgcolor='#242629',
-            plot_bgcolor='#242629',
-            font=dict(color='#d8d9da')
+            height=320,
+            margin=dict(l=10, r=10, t=80, b=10),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e2e8f0', family='Plus Jakarta Sans')
         )
         st.plotly_chart(fig_gauge, use_container_width=True)
 
     with col2:
-        # Service Distribution - Dark Theme
+        # Service Distribution - Premium Theme
         fig_fleet = go.Figure(data=[go.Pie(
             labels=['Trains', 'Buses'],
             values=[stats_dict.get('Trains Active', 0), stats_dict.get('Buses Active', 0)],
-            hole=0.4,
-            marker=dict(colors=['#73bf69', '#6e9bd1'], line=dict(color='#242629', width=2)),
+            hole=0.5,
+            marker=dict(
+                colors=['#3b82f6', '#8b5cf6'],
+                line=dict(color='rgba(255,255,255,0.1)', width=3)
+            ),
             textinfo='label+value+percent',
-            textfont=dict(size=14, color='#d8d9da'),
+            textfont=dict(size=15, color='#f8fafc', family='Plus Jakarta Sans', weight=600),
             hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
         )])
         fig_fleet.update_layout(
-            title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
-            height=300,
+            title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#e2e8f0', 'family': 'Plus Jakarta Sans'}},
+            height=320,
             showlegend=True,
-            legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5, font=dict(color='#d8d9da')),
-            paper_bgcolor='#242629',
-            plot_bgcolor='#242629',
-            font=dict(color='#d8d9da')
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=-0.15,
+                xanchor="center",
+                x=0.5,
+                font=dict(color='#cbd5e1', size=12, family='Plus Jakarta Sans')
+            ),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e2e8f0', family='Plus Jakarta Sans')
         )
         st.plotly_chart(fig_fleet, use_container_width=True)
 
     with col3:
-        # On-Time vs Delayed - Dark Theme
+        # On-Time vs Delayed - Premium Theme
         fig_status = go.Figure()
 
         fig_status.add_trace(go.Bar(
             x=['On Time', 'Delayed'],
             y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
             marker=dict(
-                color=['#73bf69', '#ff5705'],
-                line=dict(color='#242629', width=1)
+                color=['#10b981', '#ec4899'],
+                line=dict(color='rgba(255,255,255,0.1)', width=2),
+                pattern=dict(shape=['', '/'], solidity=0.3)
             ),
             text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
             textposition='outside',
-            textfont=dict(size=16, color='#d8d9da')
+            textfont=dict(size=18, color='#f8fafc', family='Plus Jakarta Sans', weight=700)
         ))
 
         fig_status.update_layout(
-            title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
-            height=300,
-            yaxis=dict(title='Vehicles', color='#d8d9da', gridcolor='#2e3034'),
-            xaxis=dict(color='#d8d9da'),
+            title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#e2e8f0', 'family': 'Plus Jakarta Sans'}},
+            height=320,
+            yaxis=dict(
+                title='Vehicles',
+                color='#94a3b8',
+                gridcolor='rgba(148, 163, 184, 0.1)',
+                tickfont=dict(color='#cbd5e1', family='Plus Jakarta Sans')
+            ),
+            xaxis=dict(
+                color='#cbd5e1',
+                tickfont=dict(color='#cbd5e1', size=13, family='Plus Jakarta Sans', weight=600)
+            ),
             showlegend=False,
-            plot_bgcolor='#242629',
-            paper_bgcolor='#242629',
-            font=dict(color='#d8d9da'),
-            margin=dict(l=40, r=40, t=60, b=40)
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#e2e8f0', family='Plus Jakarta Sans'),
+            margin=dict(l=50, r=30, t=80, b=50)
         )
         st.plotly_chart(fig_status, use_container_width=True)
 
     with col4:
-        # Key Metrics
-        st.metric("Total Vehicles", stats_dict.get('Total Vehicles', 0))
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.metric("Train Lines", stats_dict.get('Train Lines', 0))
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.metric("Bus Routes", stats_dict.get('Bus Routes', 0))
+        # Key Metrics - Premium Cards
+        st.markdown(f"""
+            <div style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;'>
+                <div style='color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Total Fleet</div>
+                <div style='color: #f8fafc; font-size: 2.5rem; font-weight: 800;'>{stats_dict.get('Total Vehicles', 0)}</div>
+                <div style='color: #3b82f6; font-size: 0.875rem; font-weight: 600; margin-top: 0.5rem;'>● Active Now</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-    # Time Series Trends - Dark Theme
+        st.markdown(f"""
+            <div style='background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;'>
+                <div style='color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Train Lines</div>
+                <div style='color: #f8fafc; font-size: 2.5rem; font-weight: 800;'>{stats_dict.get('Train Lines', 0)}</div>
+                <div style='color: #10b981; font-size: 0.875rem; font-weight: 600; margin-top: 0.5rem;'>● Operational</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown(f"""
+            <div style='background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px; padding: 1.5rem;'>
+                <div style='color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Bus Routes</div>
+                <div style='color: #f8fafc; font-size: 2.5rem; font-weight: 800;'>{stats_dict.get('Bus Routes', 0)}</div>
+                <div style='color: #8b5cf6; font-size: 0.875rem; font-weight: 600; margin-top: 0.5rem;'>● In Service</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # Time Series Trends - Premium Theme
     go_timeseries = fetch_data(f"{GO_API}?type=timeseries")
     if go_timeseries:
         st.subheader("24-Hour Activity Trends")
 
         fig_ts = go.Figure()
-        colors = ['#73bf69', '#6e9bd1', '#f5a742']
+        colors = ['#3b82f6', '#8b5cf6', '#10b981']
+        fills = ['rgba(59, 130, 246, 0.1)', 'rgba(139, 92, 246, 0.1)', 'rgba(16, 185, 129, 0.1)']
 
         for idx, series in enumerate(go_timeseries):
             timestamps = [datetime.fromtimestamp(p[1]/1000) for p in series['datapoints']]
@@ -338,55 +475,75 @@ if go_stats:
                 y=values,
                 mode='lines+markers',
                 name=series['target'],
-                line=dict(width=2, color=colors[idx % len(colors)]),
-                marker=dict(size=5),
+                line=dict(width=3, color=colors[idx % len(colors)], shape='spline'),
+                marker=dict(size=7, color=colors[idx % len(colors)], line=dict(color='#f8fafc', width=2)),
+                fill='tozeroy',
+                fillcolor=fills[idx % len(fills)],
                 hovertemplate='<b>%{fullData.name}</b><br>Time: %{x|%H:%M}<br>Value: %{y}<extra></extra>'
             ))
 
         fig_ts.update_layout(
-            height=400,
+            height=450,
             hovermode='x unified',
-            plot_bgcolor='#242629',
-            paper_bgcolor='#242629',
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
             xaxis=dict(
-                title=dict(text='Time', font=dict(color='#d8d9da')),
+                title=dict(text='Time', font=dict(color='#e2e8f0', size=14, family='Plus Jakarta Sans')),
                 showgrid=True,
-                gridcolor='#2e3034',
-                color='#d8d9da'
+                gridcolor='rgba(148, 163, 184, 0.1)',
+                color='#cbd5e1',
+                tickfont=dict(color='#94a3b8', family='Plus Jakarta Sans')
             ),
             yaxis=dict(
-                title=dict(text='Count / Percentage', font=dict(color='#d8d9da')),
+                title=dict(text='Count / Percentage', font=dict(color='#e2e8f0', size=14, family='Plus Jakarta Sans')),
                 showgrid=True,
-                gridcolor='#2e3034',
-                color='#d8d9da'
+                gridcolor='rgba(148, 163, 184, 0.1)',
+                color='#cbd5e1',
+                tickfont=dict(color='#94a3b8', family='Plus Jakarta Sans')
             ),
             legend=dict(
                 orientation="h",
                 yanchor="top",
-                y=-0.15,
+                y=-0.12,
                 xanchor="center",
                 x=0.5,
-                font=dict(color='#d8d9da')
+                font=dict(color='#cbd5e1', size=13, family='Plus Jakarta Sans'),
+                bgcolor='rgba(255,255,255,0.05)',
+                bordercolor='rgba(255,255,255,0.1)',
+                borderwidth=1
             ),
-            font=dict(color='#d8d9da'),
-            margin=dict(l=60, r=40, t=40, b=80)
+            font=dict(color='#e2e8f0', family='Plus Jakarta Sans'),
+            margin=dict(l=70, r=40, t=50, b=90)
         )
 
         st.plotly_chart(fig_ts, use_container_width=True)
 
 
-# Footer - Dark Theme
+# Premium Footer
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style='text-align: center; padding: 1.5rem 0; border-top: 1px solid #2e3034; margin-top: 2.5rem;'>
-        <p style='color: #9fa3a8; font-size: 0.8125rem; margin: 0; font-weight: 500;'>
-            Metrolinx Open API • Real-time GO Transit Data
-        </p>
-        <p style='color: #6e7175; font-size: 0.75rem; margin-top: 0.375rem;'>
-            Last updated {} • Refreshes every 60s
-        </p>
+    <div style='text-align: center; padding: 2.5rem 0; margin-top: 3rem;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border-top: 2px solid rgba(59, 130, 246, 0.2);
+    border-radius: 20px 20px 0 0;'>
+        <div style='color: #94a3b8; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.75rem;'>
+            ⚡ POWERED BY
+        </div>
+        <div style='background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem;'>
+            Metrolinx Open API
+        </div>
+        <div style='color: #64748b; font-size: 0.8125rem; font-weight: 500;'>
+            🔄 Live Updates Every 60s • Last Refresh: {} EST
+        </div>
+        <div style='margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(148, 163, 184, 0.15);'>
+            <div style='color: #475569; font-size: 0.75rem;'>
+                Built with Streamlit • Real-time Transit Intelligence
+            </div>
+        </div>
     </div>
-""".format(datetime.now().strftime("%H:%M EST")), unsafe_allow_html=True)
+""".format(datetime.now().strftime("%H:%M")), unsafe_allow_html=True)
 
 # Auto-refresh
 if auto_refresh:
