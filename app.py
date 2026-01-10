@@ -1,5 +1,5 @@
 """
-Toronto Transit Dashboard - Home Page
+GO Transit Dashboard - Home Page
 Professional transit monitoring and analytics platform
 """
 
@@ -14,8 +14,8 @@ from route_data import get_route_name
 
 # Page config
 st.set_page_config(
-    page_title="Toronto Transit Dashboard",
-    page_icon="🚇",
+    page_title="GO Transit Dashboard",
+    page_icon="🚆",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -132,7 +132,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 GO_API = "https://ttc-alerts-api.vercel.app/api/go"
-TTC_API = "https://ttc-alerts-api.vercel.app/api"
 
 @st.cache_data(ttl=60)
 def fetch_data(url):
@@ -158,21 +157,18 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### ⚙️ Settings")
     auto_refresh = st.checkbox("Auto-refresh (60s)", value=True)
-    show_ttc = st.checkbox("Show TTC", value=True)
-    show_go = st.checkbox("Show GO Transit", value=True)
 
     if st.button("🔄 Refresh Now", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
 
     st.markdown("---")
-    st.caption("📡 **Data Sources**")
-    st.caption("• TTC GTFS-Realtime")
+    st.caption("📡 **Data Source**")
     st.caption("• Metrolinx Open API")
     st.caption(f"🕐 {datetime.now().strftime('%H:%M:%S')}")
 
 # Header
-st.title("Toronto Transit Network")
+st.title("GO Transit Command Center")
 st.markdown(f"<p class='section-subtitle'>Real-time Operations Monitor • {datetime.now().strftime('%B %d, %Y at %H:%M EST')}</p>", unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -188,47 +184,31 @@ st.markdown("""
     box-shadow: 0 1px 2px rgba(0,0,0,0.3); border: 1px solid #2e3034; margin-bottom: 1.5rem;'>
 """, unsafe_allow_html=True)
 
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3 = st.columns(3)
 
-if show_go:
-    go_stats = fetch_data(f"{GO_API}?type=stats")
-    if go_stats and isinstance(go_stats, list) and len(go_stats) > 0:
-        stats_dict = {i['metric']: i['value'] for i in go_stats}
-    else:
-        st.warning("Unable to load GO Transit statistics")
-        stats_dict = {}
+go_stats = fetch_data(f"{GO_API}?type=stats")
+if go_stats and isinstance(go_stats, list) and len(go_stats) > 0:
+    stats_dict = {i['metric']: i['value'] for i in go_stats}
+else:
+    st.warning("Unable to load GO Transit statistics")
+    stats_dict = {}
 
-    if stats_dict:
-        with col1:
-            st.metric(
-                "🚆 GO Performance",
-                f"{stats_dict.get('Performance Rate', 0)}%",
-                delta=f"{stats_dict.get('Performance Rate', 0) - 95}% vs target",
-                delta_color="normal" if stats_dict.get('Performance Rate', 0) >= 95 else "inverse"
-            )
+if stats_dict:
+    with col1:
+        st.metric(
+            "🚆 Performance",
+            f"{stats_dict.get('Performance Rate', 0)}%",
+            delta=f"{stats_dict.get('Performance Rate', 0) - 95}% vs target",
+            delta_color="normal" if stats_dict.get('Performance Rate', 0) >= 95 else "inverse"
+        )
 
-        with col2:
-            st.metric("🚊 Active Vehicles", stats_dict.get('Total Vehicles', 0),
-                     delta=f"{stats_dict.get('Trains in Motion', 0) + stats_dict.get('Buses in Motion', 0)} moving")
+    with col2:
+        st.metric("🚊 Active Vehicles", stats_dict.get('Total Vehicles', 0),
+                 delta=f"{stats_dict.get('Trains in Motion', 0) + stats_dict.get('Buses in Motion', 0)} moving")
 
-        with col3:
-            st.metric("✅ On Time", stats_dict.get('On Time', 0),
-                     delta=f"{round(stats_dict.get('On Time', 0) / stats_dict.get('Total Vehicles', 1) * 100)}%")
-
-if show_ttc:
-    ttc_summary = fetch_data(f"{TTC_API}/summary")
-    if ttc_summary and isinstance(ttc_summary, list) and len(ttc_summary) > 0:
-        summary_dict = {i['metric']: i['value'] for i in ttc_summary}
-
-        with col4:
-            st.metric("🚨 TTC Alerts", summary_dict.get('Total Alerts', 0),
-                     delta=f"{summary_dict.get('Critical', 0)} critical",
-                     delta_color="inverse" if summary_dict.get('Critical', 0) > 0 else "off")
-
-        with col5:
-            total_services = summary_dict.get('Subway', 0) + summary_dict.get('Bus', 0) + summary_dict.get('Streetcar', 0)
-            st.metric("🚇 TTC Services", total_services,
-                     delta=f"{summary_dict.get('Subway', 0)} subway")
+    with col3:
+        st.metric("✅ On Time", stats_dict.get('On Time', 0),
+                 delta=f"{round(stats_dict.get('On Time', 0) / stats_dict.get('Total Vehicles', 1) * 100)}%")
 
 st.markdown("</div>", unsafe_allow_html=True)
 
@@ -237,110 +217,109 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ============================================================================
 # GO TRANSIT SECTION
 # ============================================================================
-if show_go:
-    st.header("GO Transit Live Status")
+st.header("GO Transit Live Status")
 
-    go_stats = fetch_data(f"{GO_API}?type=stats")
-    if go_stats:
-        stats_dict = {i['metric']: i['value'] for i in go_stats}
+go_stats = fetch_data(f"{GO_API}?type=stats")
+if go_stats:
+    stats_dict = {i['metric']: i['value'] for i in go_stats}
 
-        # Performance Dashboard
-        col1, col2, col3, col4 = st.columns(4)
+    # Performance Dashboard
+    col1, col2, col3, col4 = st.columns(4)
 
-        with col1:
-            # Performance Gauge - Dark Theme
-            fig_gauge = go.Figure(go.Indicator(
-                mode="gauge+number+delta",
-                value=stats_dict.get('Performance Rate', 0),
-                title={'text': "On-Time Performance", 'font': {'size': 18, 'color': '#d8d9da'}},
-                delta={'reference': 95, 'increasing': {'color': '#73bf69'}, 'decreasing': {'color': '#ff5705'}},
-                number={'suffix': '%', 'font': {'size': 44, 'color': '#d8d9da'}},
-                gauge={
-                    'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#9fa3a8'},
-                    'bar': {'color': "#73bf69", 'thickness': 0.75},
-                    'bgcolor': "#1a1d21",
-                    'borderwidth': 1,
-                    'bordercolor': "#2e3034",
-                    'steps': [
-                        {'range': [0, 70], 'color': '#3d2c2c'},
-                        {'range': [70, 85], 'color': '#3d3420'},
-                        {'range': [85, 95], 'color': '#2a3a2c'},
-                        {'range': [95, 100], 'color': '#2f4f2f'}
-                    ],
-                    'threshold': {
-                        'line': {'color': "#d8d9da", 'width': 3},
-                        'thickness': 0.75,
-                        'value': 95
-                    }
+    with col1:
+        # Performance Gauge - Dark Theme
+        fig_gauge = go.Figure(go.Indicator(
+            mode="gauge+number+delta",
+            value=stats_dict.get('Performance Rate', 0),
+            title={'text': "On-Time Performance", 'font': {'size': 18, 'color': '#d8d9da'}},
+            delta={'reference': 95, 'increasing': {'color': '#73bf69'}, 'decreasing': {'color': '#ff5705'}},
+            number={'suffix': '%', 'font': {'size': 44, 'color': '#d8d9da'}},
+            gauge={
+                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#9fa3a8'},
+                'bar': {'color': "#73bf69", 'thickness': 0.75},
+                'bgcolor': "#1a1d21",
+                'borderwidth': 1,
+                'bordercolor': "#2e3034",
+                'steps': [
+                    {'range': [0, 70], 'color': '#3d2c2c'},
+                    {'range': [70, 85], 'color': '#3d3420'},
+                    {'range': [85, 95], 'color': '#2a3a2c'},
+                    {'range': [95, 100], 'color': '#2f4f2f'}
+                ],
+                'threshold': {
+                    'line': {'color': "#d8d9da", 'width': 3},
+                    'thickness': 0.75,
+                    'value': 95
                 }
-            ))
-            fig_gauge.update_layout(
-                height=300,
-                margin=dict(l=20, r=20, t=60, b=20),
-                paper_bgcolor='#242629',
-                plot_bgcolor='#242629',
-                font=dict(color='#d8d9da')
-            )
-            st.plotly_chart(fig_gauge, use_container_width=True)
+            }
+        ))
+        fig_gauge.update_layout(
+            height=300,
+            margin=dict(l=20, r=20, t=60, b=20),
+            paper_bgcolor='#242629',
+            plot_bgcolor='#242629',
+            font=dict(color='#d8d9da')
+        )
+        st.plotly_chart(fig_gauge, use_container_width=True)
 
-        with col2:
-            # Service Distribution - Dark Theme
-            fig_fleet = go.Figure(data=[go.Pie(
-                labels=['Trains', 'Buses'],
-                values=[stats_dict.get('Trains Active', 0), stats_dict.get('Buses Active', 0)],
-                hole=0.4,
-                marker=dict(colors=['#73bf69', '#6e9bd1'], line=dict(color='#242629', width=2)),
-                textinfo='label+value+percent',
-                textfont=dict(size=14, color='#d8d9da'),
-                hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
-            )])
-            fig_fleet.update_layout(
-                title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
-                height=300,
-                showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5, font=dict(color='#d8d9da')),
-                paper_bgcolor='#242629',
-                plot_bgcolor='#242629',
-                font=dict(color='#d8d9da')
-            )
-            st.plotly_chart(fig_fleet, use_container_width=True)
+    with col2:
+        # Service Distribution - Dark Theme
+        fig_fleet = go.Figure(data=[go.Pie(
+            labels=['Trains', 'Buses'],
+            values=[stats_dict.get('Trains Active', 0), stats_dict.get('Buses Active', 0)],
+            hole=0.4,
+            marker=dict(colors=['#73bf69', '#6e9bd1'], line=dict(color='#242629', width=2)),
+            textinfo='label+value+percent',
+            textfont=dict(size=14, color='#d8d9da'),
+            hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
+        )])
+        fig_fleet.update_layout(
+            title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
+            height=300,
+            showlegend=True,
+            legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5, font=dict(color='#d8d9da')),
+            paper_bgcolor='#242629',
+            plot_bgcolor='#242629',
+            font=dict(color='#d8d9da')
+        )
+        st.plotly_chart(fig_fleet, use_container_width=True)
 
-        with col3:
-            # On-Time vs Delayed - Dark Theme
-            fig_status = go.Figure()
+    with col3:
+        # On-Time vs Delayed - Dark Theme
+        fig_status = go.Figure()
 
-            fig_status.add_trace(go.Bar(
-                x=['On Time', 'Delayed'],
-                y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
-                marker=dict(
-                    color=['#73bf69', '#ff5705'],
-                    line=dict(color='#242629', width=1)
-                ),
-                text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
-                textposition='outside',
-                textfont=dict(size=16, color='#d8d9da')
-            ))
+        fig_status.add_trace(go.Bar(
+            x=['On Time', 'Delayed'],
+            y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
+            marker=dict(
+                color=['#73bf69', '#ff5705'],
+                line=dict(color='#242629', width=1)
+            ),
+            text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
+            textposition='outside',
+            textfont=dict(size=16, color='#d8d9da')
+        ))
 
-            fig_status.update_layout(
-                title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
-                height=300,
-                yaxis=dict(title='Vehicles', color='#d8d9da', gridcolor='#2e3034'),
-                xaxis=dict(color='#d8d9da'),
-                showlegend=False,
-                plot_bgcolor='#242629',
-                paper_bgcolor='#242629',
-                font=dict(color='#d8d9da'),
-                margin=dict(l=40, r=40, t=60, b=40)
-            )
-            st.plotly_chart(fig_status, use_container_width=True)
+        fig_status.update_layout(
+            title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
+            height=300,
+            yaxis=dict(title='Vehicles', color='#d8d9da', gridcolor='#2e3034'),
+            xaxis=dict(color='#d8d9da'),
+            showlegend=False,
+            plot_bgcolor='#242629',
+            paper_bgcolor='#242629',
+            font=dict(color='#d8d9da'),
+            margin=dict(l=40, r=40, t=60, b=40)
+        )
+        st.plotly_chart(fig_status, use_container_width=True)
 
-        with col4:
-            # Key Metrics
-            st.metric("Total Vehicles", stats_dict.get('Total Vehicles', 0))
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.metric("Train Lines", stats_dict.get('Train Lines', 0))
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.metric("Bus Routes", stats_dict.get('Bus Routes', 0))
+    with col4:
+        # Key Metrics
+        st.metric("Total Vehicles", stats_dict.get('Total Vehicles', 0))
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.metric("Train Lines", stats_dict.get('Train Lines', 0))
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.metric("Bus Routes", stats_dict.get('Bus Routes', 0))
 
     # Time Series Trends - Dark Theme
     go_timeseries = fetch_data(f"{GO_API}?type=timeseries")
@@ -395,102 +374,13 @@ if show_go:
 
         st.plotly_chart(fig_ts, use_container_width=True)
 
-    st.markdown("---")
-
-# ============================================================================
-# TTC SECTION
-# ============================================================================
-if show_ttc:
-    st.header("TTC Service Status")
-
-    ttc_alerts = fetch_data(f"{TTC_API}/alerts")
-    ttc_summary = fetch_data(f"{TTC_API}/summary")
-
-    if ttc_summary:
-        summary_dict = {i['metric']: i['value'] for i in ttc_summary}
-
-        col1, col2, col3 = st.columns(3)
-
-        with col1:
-            # Alert Severity Gauge - Dark Theme
-            critical_pct = (summary_dict.get('Critical', 0) / max(summary_dict.get('Total Alerts', 1), 1)) * 100
-
-            fig_severity = go.Figure(go.Indicator(
-                mode="number+gauge",
-                value=critical_pct,
-                title={'text': "Critical Alert Ratio", 'font': {'size': 18, 'color': '#d8d9da'}},
-                number={'suffix': '%', 'font': {'size': 36, 'color': '#d8d9da'}},
-                gauge={
-                    'axis': {'range': [None, 100], 'tickcolor': '#9fa3a8'},
-                    'bar': {'color': "#ff5705"},
-                    'bgcolor': '#1a1d21',
-                    'borderwidth': 1,
-                    'bordercolor': '#2e3034',
-                    'steps': [
-                        {'range': [0, 25], 'color': '#2a3a2c'},
-                        {'range': [25, 50], 'color': '#3d3420'},
-                        {'range': [50, 100], 'color': '#3d2c2c'}
-                    ]
-                }
-            ))
-            fig_severity.update_layout(
-                height=250,
-                margin=dict(l=20, r=20, t=60, b=20),
-                paper_bgcolor='#242629',
-                plot_bgcolor='#242629',
-                font=dict(color='#d8d9da')
-            )
-            st.plotly_chart(fig_severity, use_container_width=True)
-
-        with col2:
-            # Service Type Distribution - Dark Theme
-            service_data = [
-                ('Subway', summary_dict.get('Subway', 0)),
-                ('Bus', summary_dict.get('Bus', 0)),
-                ('Streetcar', summary_dict.get('Streetcar', 0))
-            ]
-
-            fig_services = go.Figure(data=[go.Pie(
-                labels=[s[0] for s in service_data],
-                values=[s[1] for s in service_data],
-                marker=dict(colors=['#6e9bd1', '#8b7fc8', '#f5a742'], line=dict(color='#242629', width=2)),
-                textinfo='label+value',
-                textfont=dict(size=14, color='#d8d9da'),
-                hole=0.3
-            )])
-            fig_services.update_layout(
-                title={'text': 'Alerts by Service', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
-                height=250,
-                paper_bgcolor='#242629',
-                plot_bgcolor='#242629',
-                font=dict(color='#d8d9da')
-            )
-            st.plotly_chart(fig_services, use_container_width=True)
-
-        with col3:
-            st.markdown("### Alert Summary")
-            st.metric("Total Alerts", summary_dict.get('Total Alerts', 0))
-            st.metric("Critical", summary_dict.get('Critical', 0), delta_color="inverse")
-            st.metric("High Severity", summary_dict.get('High Severity', 0))
-
-    if ttc_alerts and isinstance(ttc_alerts, list) and len(ttc_alerts) > 0:
-        st.subheader("Active Service Disruptions")
-        df_ttc = pd.DataFrame(ttc_alerts).head(15)
-
-        def highlight_severity(row):
-            colors = {'High': '#ffcdd2', 'Medium': '#fff9c4', 'Low': '#b3e5fc'}
-            color = colors.get(row['Severity'], '#ffffff')
-            return [f'background-color: {color}; padding: 10px; border-radius: 5px;'] * len(row)
-
-        styled_df = df_ttc.style.apply(highlight_severity, axis=1)
-        st.dataframe(styled_df, use_container_width=True, height=400)
 
 # Footer - Dark Theme
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
     <div style='text-align: center; padding: 1.5rem 0; border-top: 1px solid #2e3034; margin-top: 2.5rem;'>
         <p style='color: #9fa3a8; font-size: 0.8125rem; margin: 0; font-weight: 500;'>
-            TTC GTFS-Realtime • Metrolinx Open API
+            Metrolinx Open API • Real-time GO Transit Data
         </p>
         <p style='color: #6e7175; font-size: 0.75rem; margin-top: 0.375rem;'>
             Last updated {} • Refreshes every 60s
