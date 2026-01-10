@@ -331,6 +331,128 @@ if stats_dict:
             delta_color="inverse"
         )
 
+    # ============================================================================
+    # DETAILED SERVICE BREAKDOWN
+    # ============================================================================
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.subheader("📊 Service Breakdown")
+
+    col1, col2, col3, col4, col5, col6 = st.columns(6, gap="small")
+
+    with col1:
+        st.metric(
+            "🚂 Trains Active",
+            stats_dict.get('Trains Active', 0),
+            delta=f"{stats_dict.get('Trains in Motion', 0)} moving"
+        )
+
+    with col2:
+        st.metric(
+            "🚌 Buses Active",
+            stats_dict.get('Buses Active', 0),
+            delta=f"{stats_dict.get('Buses in Motion', 0)} moving"
+        )
+
+    with col3:
+        st.metric(
+            "🛤️ Train Lines",
+            stats_dict.get('Train Lines', 0),
+            delta="Operational"
+        )
+
+    with col4:
+        st.metric(
+            "🚏 Bus Routes",
+            stats_dict.get('Bus Routes', 0),
+            delta="Active"
+        )
+
+    with col5:
+        avg_speed = stats_dict.get('Average Speed', 0)
+        st.metric(
+            "⚡ Avg Speed",
+            f"{avg_speed} km/h",
+            delta="Fleet average"
+        )
+
+    with col6:
+        early = stats_dict.get('Early', 0)
+        st.metric(
+            "⏰ Early Arrivals",
+            early,
+            delta=f"{round(early / stats_dict.get('Total Vehicles', 1) * 100)}%"
+        )
+
+    # Regional breakdown
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns([2, 1])
+
+    with col1:
+        st.markdown("""
+            <div style='background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+            border: 2px solid #e0e7ff; border-radius: 16px; padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);'>
+                <div style='color: #6366f1; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 1rem;'>
+                    🌍 REGIONAL COVERAGE
+                </div>
+                <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;'>
+                    <div style='background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); padding: 0.75rem; border-radius: 10px;'>
+                        <div style='color: #1e40af; font-size: 0.65rem; font-weight: 700;'>GREATER TORONTO</div>
+                        <div style='color: #0f172a; font-size: 1.25rem; font-weight: 900;'>Toronto, Mississauga</div>
+                    </div>
+                    <div style='background: linear-gradient(135deg, #d1fae5 0%, #dbeafe 100%); padding: 0.75rem; border-radius: 10px;'>
+                        <div style='color: #065f46; font-size: 0.65rem; font-weight: 700;'>WESTERN CORRIDOR</div>
+                        <div style='color: #0f172a; font-size: 1.25rem; font-weight: 900;'>Hamilton, Milton</div>
+                    </div>
+                    <div style='background: linear-gradient(135deg, #e9d5ff 0%, #fae8ff 100%); padding: 0.75rem; border-radius: 10px;'>
+                        <div style='color: #6b21a8; font-size: 0.65rem; font-weight: 700;'>EASTERN REGION</div>
+                        <div style='color: #0f172a; font-size: 1.25rem; font-weight: 900;'>Oshawa, Durham</div>
+                    </div>
+                    <div style='background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%); padding: 0.75rem; border-radius: 10px;'>
+                        <div style='color: #92400e; font-size: 0.65rem; font-weight: 700;'>NORTHERN ROUTES</div>
+                        <div style='color: #0f172a; font-size: 1.25rem; font-weight: 900;'>Barrie, Newmarket</div>
+                    </div>
+                    <div style='background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 0.75rem; border-radius: 10px;'>
+                        <div style='color: #991b1b; font-size: 0.65rem; font-weight: 700;'>WESTERN ONTARIO</div>
+                        <div style='color: #0f172a; font-size: 1.25rem; font-weight: 900;'>Kitchener, Guelph</div>
+                    </div>
+                    <div style='background: linear-gradient(135deg, #bfdbfe 0%, #dbeafe 100%); padding: 0.75rem; border-radius: 10px;'>
+                        <div style='color: #1e40af; font-size: 0.65rem; font-weight: 700;'>NIAGARA REGION</div>
+                        <div style='color: #0f172a; font-size: 1.25rem; font-weight: 900;'>Niagara Falls</div>
+                    </div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
+            border: 2px solid #fbbf24; border-radius: 16px; padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.15); height: 100%;'>
+                <div style='color: #92400e; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 1rem;'>
+                    ⚡ LIVE STATS
+                </div>
+                <div style='margin-bottom: 1rem;'>
+                    <div style='color: #78350f; font-size: 0.65rem; font-weight: 700; margin-bottom: 0.25rem;'>FLEET IN MOTION</div>
+                    <div style='color: #0f172a; font-size: 1.75rem; font-weight: 900;'>
+                        {stats_dict.get('Trains in Motion', 0) + stats_dict.get('Buses in Motion', 0)}
+                        <span style='font-size: 0.875rem; color: #78350f;'>/{stats_dict.get('Total Vehicles', 0)}</span>
+                    </div>
+                </div>
+                <div style='margin-bottom: 1rem;'>
+                    <div style='color: #78350f; font-size: 0.65rem; font-weight: 700; margin-bottom: 0.25rem;'>SERVICE RELIABILITY</div>
+                    <div style='color: #0f172a; font-size: 1.75rem; font-weight: 900;'>
+                        {stats_dict.get('Performance Rate', 0)}%
+                    </div>
+                </div>
+                <div>
+                    <div style='color: #78350f; font-size: 0.65rem; font-weight: 700; margin-bottom: 0.25rem;'>PEAK CAPACITY</div>
+                    <div style='color: #0f172a; font-size: 1.75rem; font-weight: 900;'>Active</div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
 # ============================================================================
 # GO TRANSIT SECTION
 # ============================================================================
