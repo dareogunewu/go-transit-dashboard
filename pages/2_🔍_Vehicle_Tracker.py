@@ -298,7 +298,7 @@ if show_map and not df_with_location.empty:
     else:
         zoom = 8
 
-    # Create map - Dark Theme
+    # Create map - Bright Theme
     fig_map = px.scatter_mapbox(
         df_with_location,
         lat="Latitude",
@@ -314,13 +314,14 @@ if show_map and not df_with_location.empty:
             "Latitude": ":.4f",
             "Longitude": ":.4f"
         },
-        color_discrete_map={"Train": "#73bf69", "Bus": "#6e9bd1"},
+        color_discrete_map={"Train": "#10b981", "Bus": "#3b82f6"},
         zoom=zoom,
-        height=500
+        height=500,
+        center={"lat": center_lat, "lon": center_lon}
     )
 
     fig_map.update_layout(
-        mapbox_style="streets",
+        mapbox_style="open-street-map",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
         hoverlabel=dict(bgcolor="#ffffff", font_size=12, font_color="#0f172a"),
         paper_bgcolor='#ffffff',

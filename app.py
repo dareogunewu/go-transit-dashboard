@@ -785,11 +785,12 @@ if go_vehicles:
                         },
                         color_discrete_map={"On Time": "#10b981", "Delayed": "#ef4444", "Early": "#3b82f6"},
                         zoom=zoom,
-                        height=500
+                        height=500,
+                        center={"lat": center_lat, "lon": center_lon}
                     )
 
                     fig_route_map.update_layout(
-                        mapbox_style="streets",
+                        mapbox_style="open-street-map",
                         margin={"r": 0, "t": 0, "l": 0, "b": 0},
                         hoverlabel=dict(bgcolor="#ffffff", font_size=12, font_color="#0f172a"),
                         paper_bgcolor='#ffffff',
