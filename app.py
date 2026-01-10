@@ -35,44 +35,48 @@ st.markdown("""
     }
 
     .main {
-        padding: 2.5rem 3rem;
-        max-width: 1800px;
+        padding: 1.5rem 2rem !important;
+        max-width: 1600px;
         margin: 0 auto;
     }
 
     /* Glass-morphism metric cards */
     .stMetric {
-        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%) !important;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.18);
-        border-radius: 20px;
-        padding: 2rem 1.5rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+        border: 1px solid rgba(59, 130, 246, 0.2) !important;
+        border-radius: 16px !important;
+        padding: 1.25rem 1rem !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 120px;
     }
     .stMetric:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 48px rgba(59, 130, 246, 0.3);
-        border-color: rgba(59, 130, 246, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25) !important;
+        border-color: rgba(59, 130, 246, 0.4) !important;
     }
     .stMetric label {
         color: #94a3b8 !important;
         font-weight: 600 !important;
-        font-size: 0.75rem !important;
+        font-size: 0.7rem !important;
         text-transform: uppercase;
-        letter-spacing: 1.2px;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem !important;
+        display: block !important;
     }
     .stMetric [data-testid="stMetricValue"] {
         color: #f8fafc !important;
-        font-size: 2.25rem !important;
-        font-weight: 800 !important;
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+        margin: 0.25rem 0 !important;
+        display: block !important;
     }
     .stMetric [data-testid="stMetricDelta"] {
-        font-size: 0.875rem !important;
-        font-weight: 600 !important;
+        font-size: 0.8rem !important;
+        font-weight: 500 !important;
+        margin-top: 0.25rem !important;
     }
 
     /* Premium typography */
@@ -114,17 +118,31 @@ st.markdown("""
 
     /* Premium card containers */
     .element-container:has(> .stPlotlyChart) {
-        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.18);
-        border-radius: 20px;
-        padding: 1.5rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+        border: 1px solid rgba(59, 130, 246, 0.15);
+        border-radius: 16px;
+        padding: 1.25rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
+        margin-bottom: 1rem;
     }
     .element-container:has(> .stPlotlyChart):hover {
-        box-shadow: 0 12px 48px rgba(59, 130, 246, 0.2);
-        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+        border-color: rgba(59, 130, 246, 0.25);
+    }
+
+    /* Fix column gaps */
+    [data-testid="column"] {
+        padding: 0 0.5rem;
+    }
+
+    [data-testid="column"]:first-child {
+        padding-left: 0;
+    }
+
+    [data-testid="column"]:last-child {
+        padding-right: 0;
     }
 
     /* Accent colors */
@@ -271,7 +289,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.header("Network Overview")
 st.markdown("<br>", unsafe_allow_html=True)
 
-col1, col2, col3, col4 = st.columns(4, gap="large")
+col1, col2, col3, col4 = st.columns([1, 1, 1, 1], gap="medium")
 
 go_stats = fetch_data(f"{GO_API}?type=stats")
 if go_stats and isinstance(go_stats, list) and len(go_stats) > 0:
@@ -324,7 +342,7 @@ if go_stats:
     stats_dict = {i['metric']: i['value'] for i in go_stats}
 
     # Performance Dashboard
-    col1, col2, col3, col4 = st.columns(4, gap="large")
+    col1, col2, col3, col4 = st.columns([1, 1, 1, 1], gap="medium")
 
     with col1:
         # Performance Gauge - Premium Theme
@@ -433,31 +451,31 @@ if go_stats:
         st.plotly_chart(fig_status, use_container_width=True)
 
     with col4:
-        # Key Metrics - Premium Cards
+        # Key Metrics - Premium Cards (Fixed spacing)
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;'>
-                <div style='color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Total Fleet</div>
-                <div style='color: #f8fafc; font-size: 2.5rem; font-weight: 800;'>{stats_dict.get('Total Vehicles', 0)}</div>
-                <div style='color: #3b82f6; font-size: 0.875rem; font-weight: 600; margin-top: 0.5rem;'>● Active Now</div>
+            <div style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem;'>
+                <div style='color: #94a3b8; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.4rem;'>Total Fleet</div>
+                <div style='color: #f8fafc; font-size: 1.75rem; font-weight: 700; line-height: 1.2;'>{stats_dict.get('Total Vehicles', 0)}</div>
+                <div style='color: #3b82f6; font-size: 0.75rem; font-weight: 500; margin-top: 0.4rem;'>● Active Now</div>
             </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;'>
-                <div style='color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Train Lines</div>
-                <div style='color: #f8fafc; font-size: 2.5rem; font-weight: 800;'>{stats_dict.get('Train Lines', 0)}</div>
-                <div style='color: #10b981; font-size: 0.875rem; font-weight: 600; margin-top: 0.5rem;'>● Operational</div>
+            <div style='background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem;'>
+                <div style='color: #94a3b8; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.4rem;'>Train Lines</div>
+                <div style='color: #f8fafc; font-size: 1.75rem; font-weight: 700; line-height: 1.2;'>{stats_dict.get('Train Lines', 0)}</div>
+                <div style='color: #10b981; font-size: 0.75rem; font-weight: 500; margin-top: 0.4rem;'>● Operational</div>
             </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px; padding: 1.5rem;'>
-                <div style='color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;'>Bus Routes</div>
-                <div style='color: #f8fafc; font-size: 2.5rem; font-weight: 800;'>{stats_dict.get('Bus Routes', 0)}</div>
-                <div style='color: #8b5cf6; font-size: 0.875rem; font-weight: 600; margin-top: 0.5rem;'>● In Service</div>
+            <div style='background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 12px; padding: 1rem;'>
+                <div style='color: #94a3b8; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.4rem;'>Bus Routes</div>
+                <div style='color: #f8fafc; font-size: 1.75rem; font-weight: 700; line-height: 1.2;'>{stats_dict.get('Bus Routes', 0)}</div>
+                <div style='color: #8b5cf6; font-size: 0.75rem; font-weight: 500; margin-top: 0.4rem;'>● In Service</div>
             </div>
         """, unsafe_allow_html=True)
 
