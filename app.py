@@ -351,23 +351,23 @@ if go_stats:
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number+delta",
             value=perf_value,
-            title={'text': "On-Time Performance", 'font': {'size': 20, 'color': '#e2e8f0', 'family': 'Plus Jakarta Sans'}},
-            delta={'reference': 95, 'increasing': {'color': '#10b981'}, 'decreasing': {'color': '#f59e0b'}},
-            number={'suffix': '%', 'font': {'size': 48, 'color': '#f8fafc', 'family': 'Plus Jakarta Sans'}},
+            title={'text': "On-Time Performance", 'font': {'size': 18, 'color': '#1e293b', 'family': 'Plus Jakarta Sans', 'weight': 700}},
+            delta={'reference': 95, 'increasing': {'color': '#10b981'}, 'decreasing': {'color': '#ef4444'}},
+            number={'suffix': '%', 'font': {'size': 40, 'color': '#0f172a', 'family': 'Plus Jakarta Sans', 'weight': 800}},
             gauge={
-                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#64748b', 'tickfont': {'color': '#94a3b8'}},
-                'bar': {'color': "#3b82f6", 'thickness': 0.8},
-                'bgcolor': "rgba(15, 23, 42, 0.5)",
+                'axis': {'range': [None, 100], 'tickwidth': 2, 'tickcolor': '#64748b', 'tickfont': {'color': '#475569', 'size': 11}},
+                'bar': {'color': "#3b82f6", 'thickness': 0.75},
+                'bgcolor': "#f1f5f9",
                 'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 70], 'color': 'rgba(239, 68, 68, 0.2)'},
-                    {'range': [70, 85], 'color': 'rgba(245, 158, 11, 0.2)'},
-                    {'range': [85, 95], 'color': 'rgba(59, 130, 246, 0.2)'},
-                    {'range': [95, 100], 'color': 'rgba(16, 185, 129, 0.3)'}
+                    {'range': [0, 70], 'color': '#fee2e2'},
+                    {'range': [70, 85], 'color': '#fef3c7'},
+                    {'range': [85, 95], 'color': '#dbeafe'},
+                    {'range': [95, 100], 'color': '#d1fae5'}
                 ],
                 'threshold': {
-                    'line': {'color': "#8b5cf6", 'width': 4},
-                    'thickness': 0.8,
+                    'line': {'color': "#8b5cf6", 'width': 3},
+                    'thickness': 0.75,
                     'value': 95
                 }
             }
@@ -392,7 +392,7 @@ if go_stats:
                 line=dict(color='rgba(255,255,255,0.1)', width=3)
             ),
             textinfo='label+value+percent',
-            textfont=dict(size=15, color='#f8fafc', family='Plus Jakarta Sans', weight=600),
+            textfont=dict(size=15, color='#1e293b', family='Plus Jakarta Sans', weight=600),
             hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
         )])
         fig_fleet.update_layout(
@@ -427,7 +427,7 @@ if go_stats:
             ),
             text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
             textposition='outside',
-            textfont=dict(size=18, color='#f8fafc', family='Plus Jakarta Sans', weight=700)
+            textfont=dict(size=18, color='#0f172a', family='Plus Jakarta Sans', weight=700)
         ))
 
         fig_status.update_layout(

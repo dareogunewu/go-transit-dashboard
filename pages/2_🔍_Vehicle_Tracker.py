@@ -293,11 +293,11 @@ if show_map and not df_with_location.empty:
     )
 
     fig_map.update_layout(
-        mapbox_style="dark",
+        mapbox_style="streets",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        hoverlabel=dict(bgcolor="#242629", font_size=12, font_color="#d8d9da"),
-        paper_bgcolor='#242629',
-        plot_bgcolor='#242629'
+        hoverlabel=dict(bgcolor="#ffffff", font_size=12, font_color="#0f172a"),
+        paper_bgcolor='#ffffff',
+        plot_bgcolor='#ffffff'
     )
 
     st.plotly_chart(fig_map, use_container_width=True)
