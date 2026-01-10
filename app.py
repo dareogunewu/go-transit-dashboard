@@ -20,7 +20,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Ultra-Modern SaaS Dashboard Theme
+# Grafana-Style Dark Theme
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -30,13 +30,18 @@ st.markdown("""
     }
 
     .main {
-        padding: 1.5rem 2.5rem;
-        background-color: #f7f8fa;
+        padding: 2rem 2rem;
+        background-color: #181b1f;
         max-width: 1600px;
         margin: 0 auto;
     }
 
-    /* Clean metric cards - no individual borders */
+    /* Override Streamlit default backgrounds */
+    .stApp {
+        background-color: #181b1f;
+    }
+
+    /* Metric cards - dark theme */
     .stMetric {
         background: transparent;
         padding: 0;
@@ -44,7 +49,7 @@ st.markdown("""
         box-shadow: none;
     }
     .stMetric label {
-        color: #64748b !important;
+        color: #9fa3a8 !important;
         font-weight: 500;
         font-size: 0.75rem !important;
         text-transform: uppercase;
@@ -52,25 +57,25 @@ st.markdown("""
         margin-bottom: 0.5rem !important;
     }
     .stMetric [data-testid="stMetricValue"] {
-        color: #0f172a !important;
+        color: #d8d9da !important;
         font-size: 1.875rem !important;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 1;
     }
     .stMetric [data-testid="stMetricDelta"] {
         font-size: 0.8125rem !important;
     }
 
-    /* Typography */
+    /* Typography - dark theme */
     h1 {
-        color: #0f172a;
+        color: #d8d9da;
         font-size: 1.875rem;
-        font-weight: 700;
+        font-weight: 600;
         margin-bottom: 0.5rem;
         letter-spacing: -0.02em;
     }
     h2 {
-        color: #1e293b;
+        color: #d8d9da;
         font-size: 1.25rem;
         font-weight: 600;
         margin-top: 2.5rem;
@@ -78,24 +83,24 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
     h3 {
-        color: #475569;
+        color: #c4c7cc;
         font-size: 1rem;
-        font-weight: 600;
+        font-weight: 500;
         margin-bottom: 1rem;
     }
 
-    /* Card container styling */
+    /* Card container styling - dark panels */
     .element-container:has(> .stPlotlyChart) {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        border: 1px solid #e2e8f0;
+        background: #242629;
+        border-radius: 8px;
+        padding: 1.25rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        border: 1px solid #2e3034;
     }
 
     /* Section subtitle */
     .section-subtitle {
-        color: #64748b;
+        color: #9fa3a8;
         font-size: 0.875rem;
         font-weight: 400;
         margin-top: 0.25rem;
@@ -108,11 +113,20 @@ st.markdown("""
         padding-bottom: 2rem;
     }
 
-    /* Custom divider */
+    /* Custom divider - dark */
     hr {
         margin: 2rem 0;
         border: none;
-        border-top: 1px solid #e2e8f0;
+        border-top: 1px solid #2e3034;
+    }
+
+    /* Sidebar dark theme */
+    [data-testid="stSidebar"] {
+        background-color: #1f2226;
+        border-right: 1px solid #2e3034;
+    }
+    [data-testid="stSidebar"] * {
+        color: #d8d9da !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -168,10 +182,10 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ============================================================================
 st.header("Network Overview")
 
-# Metrics card container
+# Metrics card container - dark panel
 st.markdown("""
-    <div style='background: white; border-radius: 16px; padding: 1.75rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 1.5rem;'>
+    <div style='background: #242629; border-radius: 8px; padding: 1.75rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3); border: 1px solid #2e3034; margin-bottom: 1.5rem;'>
 """, unsafe_allow_html=True)
 
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -234,77 +248,88 @@ if show_go:
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            # Performance Gauge
+            # Performance Gauge - Dark Theme
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
                 value=stats_dict.get('Performance Rate', 0),
-                title={'text': "On-Time Performance", 'font': {'size': 20, 'color': '#333'}},
-                delta={'reference': 95, 'increasing': {'color': '#2e7d32'}, 'decreasing': {'color': '#c62828'}},
-                number={'suffix': '%', 'font': {'size': 48}},
+                title={'text': "On-Time Performance", 'font': {'size': 18, 'color': '#d8d9da'}},
+                delta={'reference': 95, 'increasing': {'color': '#73bf69'}, 'decreasing': {'color': '#ff5705'}},
+                number={'suffix': '%', 'font': {'size': 44, 'color': '#d8d9da'}},
                 gauge={
-                    'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#666'},
-                    'bar': {'color': "#2e7d32", 'thickness': 0.75},
-                    'bgcolor': "#f5f5f5",
+                    'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': '#9fa3a8'},
+                    'bar': {'color': "#73bf69", 'thickness': 0.75},
+                    'bgcolor': "#1a1d21",
                     'borderwidth': 1,
-                    'bordercolor': "#e0e0e0",
+                    'bordercolor': "#2e3034",
                     'steps': [
-                        {'range': [0, 70], 'color': '#ffebee'},
-                        {'range': [70, 85], 'color': '#fff3e0'},
-                        {'range': [85, 95], 'color': '#e8f5e9'},
-                        {'range': [95, 100], 'color': '#c8e6c9'}
+                        {'range': [0, 70], 'color': '#3d2c2c'},
+                        {'range': [70, 85], 'color': '#3d3420'},
+                        {'range': [85, 95], 'color': '#2a3a2c'},
+                        {'range': [95, 100], 'color': '#2f4f2f'}
                     ],
                     'threshold': {
-                        'line': {'color': "#1a1a1a", 'width': 3},
+                        'line': {'color': "#d8d9da", 'width': 3},
                         'thickness': 0.75,
                         'value': 95
                     }
                 }
             ))
-            fig_gauge.update_layout(height=300, margin=dict(l=20, r=20, t=60, b=20))
+            fig_gauge.update_layout(
+                height=300,
+                margin=dict(l=20, r=20, t=60, b=20),
+                paper_bgcolor='#242629',
+                plot_bgcolor='#242629',
+                font=dict(color='#d8d9da')
+            )
             st.plotly_chart(fig_gauge, use_container_width=True)
 
         with col2:
-            # Service Distribution
+            # Service Distribution - Dark Theme
             fig_fleet = go.Figure(data=[go.Pie(
                 labels=['Trains', 'Buses'],
                 values=[stats_dict.get('Trains Active', 0), stats_dict.get('Buses Active', 0)],
                 hole=0.4,
-                marker=dict(colors=['#00853E', '#757575'], line=dict(color='white', width=2)),
+                marker=dict(colors=['#73bf69', '#6e9bd1'], line=dict(color='#242629', width=2)),
                 textinfo='label+value+percent',
-                textfont=dict(size=14, color='white'),
+                textfont=dict(size=14, color='#d8d9da'),
                 hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
             )])
             fig_fleet.update_layout(
-                title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
+                title={'text': 'Fleet Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
                 height=300,
                 showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
+                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5, font=dict(color='#d8d9da')),
+                paper_bgcolor='#242629',
+                plot_bgcolor='#242629',
+                font=dict(color='#d8d9da')
             )
             st.plotly_chart(fig_fleet, use_container_width=True)
 
         with col3:
-            # On-Time vs Delayed
+            # On-Time vs Delayed - Dark Theme
             fig_status = go.Figure()
 
             fig_status.add_trace(go.Bar(
                 x=['On Time', 'Delayed'],
                 y=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
                 marker=dict(
-                    color=['#2e7d32', '#c62828'],
-                    line=dict(color='white', width=2)
+                    color=['#73bf69', '#ff5705'],
+                    line=dict(color='#242629', width=1)
                 ),
                 text=[stats_dict.get('On Time', 0), stats_dict.get('Delayed', 0)],
                 textposition='outside',
-                textfont=dict(size=16, color='#333')
+                textfont=dict(size=16, color='#d8d9da')
             ))
 
             fig_status.update_layout(
-                title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#333'}},
+                title={'text': 'Service Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
                 height=300,
-                yaxis_title='Vehicles',
+                yaxis=dict(title='Vehicles', color='#d8d9da', gridcolor='#2e3034'),
+                xaxis=dict(color='#d8d9da'),
                 showlegend=False,
-                plot_bgcolor='white',
-                paper_bgcolor='white',
+                plot_bgcolor='#242629',
+                paper_bgcolor='#242629',
+                font=dict(color='#d8d9da'),
                 margin=dict(l=40, r=40, t=60, b=40)
             )
             st.plotly_chart(fig_status, use_container_width=True)
@@ -317,13 +342,13 @@ if show_go:
             st.markdown("<br>", unsafe_allow_html=True)
             st.metric("Bus Routes", stats_dict.get('Bus Routes', 0))
 
-    # Time Series Trends
+    # Time Series Trends - Dark Theme
     go_timeseries = fetch_data(f"{GO_API}?type=timeseries")
     if go_timeseries:
         st.subheader("24-Hour Activity Trends")
 
         fig_ts = go.Figure()
-        colors = ['#00853E', '#757575', '#424242']
+        colors = ['#73bf69', '#6e9bd1', '#f5a742']
 
         for idx, series in enumerate(go_timeseries):
             timestamps = [datetime.fromtimestamp(p[1]/1000) for p in series['datapoints']]
@@ -334,19 +359,37 @@ if show_go:
                 y=values,
                 mode='lines+markers',
                 name=series['target'],
-                line=dict(width=3, color=colors[idx % len(colors)]),
-                marker=dict(size=6),
+                line=dict(width=2, color=colors[idx % len(colors)]),
+                marker=dict(size=5),
                 hovertemplate='<b>%{fullData.name}</b><br>Time: %{x|%H:%M}<br>Value: %{y}<extra></extra>'
             ))
 
         fig_ts.update_layout(
             height=400,
             hovermode='x unified',
-            plot_bgcolor='white',
-            paper_bgcolor='white',
-            xaxis=dict(title=dict(text='Time', font=dict(color='#333')), showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
-            yaxis=dict(title=dict(text='Count / Percentage', font=dict(color='#333')), showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
-            legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5),
+            plot_bgcolor='#242629',
+            paper_bgcolor='#242629',
+            xaxis=dict(
+                title=dict(text='Time', font=dict(color='#d8d9da')),
+                showgrid=True,
+                gridcolor='#2e3034',
+                color='#d8d9da'
+            ),
+            yaxis=dict(
+                title=dict(text='Count / Percentage', font=dict(color='#d8d9da')),
+                showgrid=True,
+                gridcolor='#2e3034',
+                color='#d8d9da'
+            ),
+            legend=dict(
+                orientation="h",
+                yanchor="top",
+                y=-0.15,
+                xanchor="center",
+                x=0.5,
+                font=dict(color='#d8d9da')
+            ),
+            font=dict(color='#d8d9da'),
             margin=dict(l=60, r=40, t=40, b=80)
         )
 
@@ -369,32 +412,38 @@ if show_ttc:
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            # Alert Severity Gauge
+            # Alert Severity Gauge - Dark Theme
             critical_pct = (summary_dict.get('Critical', 0) / max(summary_dict.get('Total Alerts', 1), 1)) * 100
 
             fig_severity = go.Figure(go.Indicator(
                 mode="number+gauge",
                 value=critical_pct,
-                title={'text': "Critical Alert Ratio", 'font': {'size': 20, 'color': '#333'}},
-                number={'suffix': '%', 'font': {'size': 36, 'color': '#333'}},
+                title={'text': "Critical Alert Ratio", 'font': {'size': 18, 'color': '#d8d9da'}},
+                number={'suffix': '%', 'font': {'size': 36, 'color': '#d8d9da'}},
                 gauge={
-                    'axis': {'range': [None, 100], 'tickcolor': '#666'},
-                    'bar': {'color': "#c62828"},
-                    'bgcolor': '#f5f5f5',
+                    'axis': {'range': [None, 100], 'tickcolor': '#9fa3a8'},
+                    'bar': {'color': "#ff5705"},
+                    'bgcolor': '#1a1d21',
                     'borderwidth': 1,
-                    'bordercolor': '#e0e0e0',
+                    'bordercolor': '#2e3034',
                     'steps': [
-                        {'range': [0, 25], 'color': '#e8f5e9'},
-                        {'range': [25, 50], 'color': '#fff3e0'},
-                        {'range': [50, 100], 'color': '#ffebee'}
+                        {'range': [0, 25], 'color': '#2a3a2c'},
+                        {'range': [25, 50], 'color': '#3d3420'},
+                        {'range': [50, 100], 'color': '#3d2c2c'}
                     ]
                 }
             ))
-            fig_severity.update_layout(height=250, margin=dict(l=20, r=20, t=60, b=20))
+            fig_severity.update_layout(
+                height=250,
+                margin=dict(l=20, r=20, t=60, b=20),
+                paper_bgcolor='#242629',
+                plot_bgcolor='#242629',
+                font=dict(color='#d8d9da')
+            )
             st.plotly_chart(fig_severity, use_container_width=True)
 
         with col2:
-            # Service Type Distribution
+            # Service Type Distribution - Dark Theme
             service_data = [
                 ('Subway', summary_dict.get('Subway', 0)),
                 ('Bus', summary_dict.get('Bus', 0)),
@@ -404,16 +453,17 @@ if show_ttc:
             fig_services = go.Figure(data=[go.Pie(
                 labels=[s[0] for s in service_data],
                 values=[s[1] for s in service_data],
-                marker=dict(colors=['#757575', '#9e9e9e', '#bdbdbd'], line=dict(color='white', width=2)),
+                marker=dict(colors=['#6e9bd1', '#8b7fc8', '#f5a742'], line=dict(color='#242629', width=2)),
                 textinfo='label+value',
-                textfont=dict(size=14),
+                textfont=dict(size=14, color='#d8d9da'),
                 hole=0.3
             )])
             fig_services.update_layout(
-                title={'text': 'Alerts by Service', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20, 'color': '#333'}},
+                title={'text': 'Alerts by Service', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
                 height=250,
-                paper_bgcolor='white',
-                plot_bgcolor='white'
+                paper_bgcolor='#242629',
+                plot_bgcolor='#242629',
+                font=dict(color='#d8d9da')
             )
             st.plotly_chart(fig_services, use_container_width=True)
 
@@ -435,14 +485,14 @@ if show_ttc:
         styled_df = df_ttc.style.apply(highlight_severity, axis=1)
         st.dataframe(styled_df, use_container_width=True, height=400)
 
-# Footer
+# Footer - Dark Theme
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style='text-align: center; padding: 1.5rem 0; border-top: 1px solid #e2e8f0; margin-top: 2.5rem;'>
-        <p style='color: #64748b; font-size: 0.8125rem; margin: 0; font-weight: 500;'>
+    <div style='text-align: center; padding: 1.5rem 0; border-top: 1px solid #2e3034; margin-top: 2.5rem;'>
+        <p style='color: #9fa3a8; font-size: 0.8125rem; margin: 0; font-weight: 500;'>
             TTC GTFS-Realtime • Metrolinx Open API
         </p>
-        <p style='color: #94a3b8; font-size: 0.75rem; margin-top: 0.375rem;'>
+        <p style='color: #6e7175; font-size: 0.75rem; margin-top: 0.375rem;'>
             Last updated {} • Refreshes every 60s
         </p>
     </div>

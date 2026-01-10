@@ -13,66 +13,101 @@ from route_data import get_route_name
 
 st.set_page_config(page_title="Vehicle Tracker", page_icon="🔍", layout="wide")
 
-# Modern Executive Dashboard Theme
+# Grafana-Style Dark Theme
 st.markdown("""
     <style>
-    .main {padding: 2rem 3rem; background-color: #fafbfc;}
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .main {
+        padding: 2rem 2rem;
+        background-color: #181b1f;
+    }
+
+    .stApp {
+        background-color: #181b1f;
+    }
 
     .stMetric {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        border: 1px solid #e8eaed;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        background: #242629;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #2e3034;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
         transition: all 0.2s ease;
     }
     .stMetric:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     }
     .stMetric label {
-        color: #5f6368 !important;
+        color: #9fa3a8 !important;
         font-weight: 500;
-        font-size: 0.8125rem !important;
+        font-size: 0.75rem !important;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.5px;
         margin-bottom: 0.5rem !important;
     }
     .stMetric [data-testid="stMetricValue"] {
-        color: #202124 !important;
-        font-size: 2.25rem !important;
+        color: #d8d9da !important;
+        font-size: 1.875rem !important;
         font-weight: 600;
-        line-height: 1.2;
+        line-height: 1;
     }
 
     h1 {
-        color: #202124;
-        font-size: 2rem;
+        color: #d8d9da;
+        font-size: 1.875rem;
         font-weight: 600;
-        margin-bottom: 0.25rem;
-        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
     }
     h2 {
-        color: #3c4043;
-        font-size: 1.5rem;
-        font-weight: 500;
-        margin-top: 3rem;
-        margin-bottom: 1.5rem;
+        color: #d8d9da;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 2.5rem;
+        margin-bottom: 1.25rem;
         padding-bottom: 0.75rem;
-        border-bottom: 1px solid #e8eaed;
+        border-bottom: 1px solid #2e3034;
     }
     h3 {
-        color: #5f6368;
-        font-size: 1.125rem;
+        color: #c4c7cc;
+        font-size: 1rem;
         font-weight: 500;
         margin-bottom: 1rem;
     }
 
     .section-subtitle {
-        color: #5f6368;
+        color: #9fa3a8;
         font-size: 0.875rem;
         font-weight: 400;
         margin-top: 0.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .element-container:has(> .stPlotlyChart) {
+        background: #242629;
+        border-radius: 8px;
+        padding: 1.25rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        border: 1px solid #2e3034;
+    }
+
+    hr {
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid #2e3034;
+    }
+
+    [data-testid="stSidebar"] {
+        background-color: #1f2226;
+        border-right: 1px solid #2e3034;
+    }
+    [data-testid="stSidebar"] * {
+        color: #d8d9da !important;
     }
     </style>
 """, unsafe_allow_html=True)

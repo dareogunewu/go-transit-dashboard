@@ -14,78 +14,113 @@ from route_data import get_route_name
 
 st.set_page_config(page_title="Analytics", page_icon="📈", layout="wide")
 
-# Modern Executive Dashboard Theme
+# Grafana-Style Dark Theme
 st.markdown("""
     <style>
-    .main {padding: 2rem 3rem; background-color: #fafbfc;}
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .main {
+        padding: 2rem 2rem;
+        background-color: #181b1f;
+    }
+
+    .stApp {
+        background-color: #181b1f;
+    }
 
     .stMetric {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        border: 1px solid #e8eaed;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        background: #242629;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #2e3034;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
         transition: all 0.2s ease;
     }
     .stMetric:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     }
     .stMetric label {
-        color: #5f6368 !important;
+        color: #9fa3a8 !important;
         font-weight: 500;
-        font-size: 0.8125rem !important;
+        font-size: 0.75rem !important;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.5px;
         margin-bottom: 0.5rem !important;
     }
     .stMetric [data-testid="stMetricValue"] {
-        color: #202124 !important;
-        font-size: 2.25rem !important;
+        color: #d8d9da !important;
+        font-size: 1.875rem !important;
         font-weight: 600;
-        line-height: 1.2;
+        line-height: 1;
     }
 
     h1 {
-        color: #202124;
-        font-size: 2rem;
+        color: #d8d9da;
+        font-size: 1.875rem;
         font-weight: 600;
-        margin-bottom: 0.25rem;
-        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
     }
     h2 {
-        color: #3c4043;
-        font-size: 1.5rem;
-        font-weight: 500;
-        margin-top: 3rem;
-        margin-bottom: 1.5rem;
+        color: #d8d9da;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 2.5rem;
+        margin-bottom: 1.25rem;
         padding-bottom: 0.75rem;
-        border-bottom: 1px solid #e8eaed;
+        border-bottom: 1px solid #2e3034;
     }
     h3 {
-        color: #5f6368;
-        font-size: 1.125rem;
+        color: #c4c7cc;
+        font-size: 1rem;
         font-weight: 500;
         margin-bottom: 1rem;
     }
 
     .metric-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid #e8eaed;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        background: #242629;
+        padding: 1.25rem;
+        border-radius: 8px;
+        border: 1px solid #2e3034;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
-    .status-good {color: #1e8e3e; font-weight: 500;}
-    .status-warning {color: #e37400; font-weight: 500;}
-    .status-critical {color: #d93025; font-weight: 500;}
+    .status-good {color: #73bf69; font-weight: 500;}
+    .status-warning {color: #f5a742; font-weight: 500;}
+    .status-critical {color: #ff5705; font-weight: 500;}
 
     .section-subtitle {
-        color: #5f6368;
+        color: #9fa3a8;
         font-size: 0.875rem;
         font-weight: 400;
         margin-top: 0.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .element-container:has(> .stPlotlyChart) {
+        background: #242629;
+        border-radius: 8px;
+        padding: 1.25rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        border: 1px solid #2e3034;
+    }
+
+    hr {
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid #2e3034;
+    }
+
+    [data-testid="stSidebar"] {
+        background-color: #1f2226;
+        border-right: 1px solid #2e3034;
+    }
+    [data-testid="stSidebar"] * {
+        color: #d8d9da !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -242,7 +277,7 @@ if show_trends:
     with tab1:
         st.subheader("Daily Performance Trends")
 
-        # Performance over time
+        # Performance over time - Dark Theme
         fig_daily = go.Figure()
 
         fig_daily.add_trace(go.Scatter(
@@ -250,10 +285,10 @@ if show_trends:
             y=df_history['performance'],
             mode='lines+markers',
             name='Performance %',
-            line=dict(color='#00853E', width=3),
-            marker=dict(size=8),
+            line=dict(color='#73bf69', width=2),
+            marker=dict(size=6),
             fill='tozeroy',
-            fillcolor='rgba(0, 133, 62, 0.1)',
+            fillcolor='rgba(115, 191, 105, 0.1)',
             hovertemplate='<b>Date:</b> %{x|%b %d}<br><b>Performance:</b> %{y:.1f}%<extra></extra>'
         ))
 
@@ -261,9 +296,10 @@ if show_trends:
         fig_daily.add_hline(
             y=95,
             line_dash="dash",
-            line_color="red",
+            line_color="#ff5705",
             annotation_text="Target: 95%",
-            annotation_position="right"
+            annotation_position="right",
+            annotation_font=dict(color='#d8d9da')
         )
 
         # Add moving average
@@ -273,18 +309,37 @@ if show_trends:
             y=df_history['ma_7'],
             mode='lines',
             name='7-Day Moving Avg',
-            line=dict(color='#757575', width=2, dash='dot'),
+            line=dict(color='#9fa3a8', width=2, dash='dot'),
             hovertemplate='<b>7-Day Avg:</b> %{y:.1f}%<extra></extra>'
         ))
 
         fig_daily.update_layout(
             height=450,
             hovermode='x unified',
-            plot_bgcolor='white',
-            paper_bgcolor='white',
-            xaxis=dict(title=dict(text='Date', font=dict(color='#333')), showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
-            yaxis=dict(title=dict(text='Performance %', font=dict(color='#333')), range=[60, 105], showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
-            legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5)
+            plot_bgcolor='#242629',
+            paper_bgcolor='#242629',
+            font=dict(color='#d8d9da'),
+            xaxis=dict(
+                title=dict(text='Date', font=dict(color='#d8d9da')),
+                showgrid=True,
+                gridcolor='#2e3034',
+                color='#d8d9da'
+            ),
+            yaxis=dict(
+                title=dict(text='Performance %', font=dict(color='#d8d9da')),
+                range=[60, 105],
+                showgrid=True,
+                gridcolor='#2e3034',
+                color='#d8d9da'
+            ),
+            legend=dict(
+                orientation="h",
+                yanchor="top",
+                y=-0.15,
+                xanchor="center",
+                x=0.5,
+                font=dict(color='#d8d9da')
+            )
         )
 
         st.plotly_chart(fig_daily, use_container_width=True)
@@ -299,7 +354,7 @@ if show_trends:
                 x=df_history['date'],
                 y=df_history['trains'],
                 name='Trains',
-                marker=dict(color='#00853E'),
+                marker=dict(color='#73bf69'),
                 hovertemplate='Trains: %{y}<extra></extra>'
             ))
 
@@ -307,19 +362,21 @@ if show_trends:
                 x=df_history['date'],
                 y=df_history['buses'],
                 name='Buses',
-                marker=dict(color='#757575'),
+                marker=dict(color='#6e9bd1'),
                 hovertemplate='Buses: %{y}<extra></extra>'
             ))
 
             fig_vehicles.update_layout(
-                title={'text': 'Daily Vehicle Count', 'font': {'color': '#333'}},
+                title={'text': 'Daily Vehicle Count', 'font': {'color': '#d8d9da'}},
                 barmode='stack',
                 height=350,
                 hovermode='x unified',
-                plot_bgcolor='white',
-                paper_bgcolor='white',
-                xaxis=dict(title=dict(text='Date', font=dict(color='#333'))),
-                yaxis=dict(title=dict(text='Vehicles', font=dict(color='#333')))
+                plot_bgcolor='#242629',
+                paper_bgcolor='#242629',
+                font=dict(color='#d8d9da'),
+                xaxis=dict(title=dict(text='Date', font=dict(color='#d8d9da')), color='#d8d9da', gridcolor='#2e3034'),
+                yaxis=dict(title=dict(text='Vehicles', font=dict(color='#d8d9da')), color='#d8d9da', gridcolor='#2e3034'),
+                legend=dict(font=dict(color='#d8d9da'))
             )
 
             st.plotly_chart(fig_vehicles, use_container_width=True)
@@ -333,7 +390,7 @@ if show_trends:
                 mode='lines',
                 name='On Time',
                 fill='tonexty',
-                line=dict(color='#2e7d32', width=2),
+                line=dict(color='#73bf69', width=2),
                 stackgroup='one'
             ))
 
@@ -343,18 +400,20 @@ if show_trends:
                 mode='lines',
                 name='Delayed',
                 fill='tonexty',
-                line=dict(color='#c62828', width=2),
+                line=dict(color='#ff5705', width=2),
                 stackgroup='one'
             ))
 
             fig_delays.update_layout(
-                title={'text': 'On-Time vs Delayed Vehicles', 'font': {'color': '#333'}},
+                title={'text': 'On-Time vs Delayed Vehicles', 'font': {'color': '#d8d9da'}},
                 height=350,
                 hovermode='x unified',
-                plot_bgcolor='white',
-                paper_bgcolor='white',
-                xaxis=dict(title=dict(text='Date', font=dict(color='#333'))),
-                yaxis=dict(title=dict(text='Vehicles', font=dict(color='#333')))
+                plot_bgcolor='#242629',
+                paper_bgcolor='#242629',
+                font=dict(color='#d8d9da'),
+                xaxis=dict(title=dict(text='Date', font=dict(color='#d8d9da')), color='#d8d9da', gridcolor='#2e3034'),
+                yaxis=dict(title=dict(text='Vehicles', font=dict(color='#d8d9da')), color='#d8d9da', gridcolor='#2e3034'),
+                legend=dict(font=dict(color='#d8d9da'))
             )
 
             st.plotly_chart(fig_delays, use_container_width=True)
