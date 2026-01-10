@@ -267,9 +267,11 @@ st.markdown(f"<p class='section-subtitle'>Real-time Performance Analytics • {d
 # ============================================================================
 # NETWORK OVERVIEW - Hero Section
 # ============================================================================
+st.markdown("<br>", unsafe_allow_html=True)
 st.header("Network Overview")
+st.markdown("<br>", unsafe_allow_html=True)
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4, gap="large")
 
 go_stats = fetch_data(f"{GO_API}?type=stats")
 if go_stats and isinstance(go_stats, list) and len(go_stats) > 0:
@@ -313,14 +315,16 @@ if stats_dict:
 # ============================================================================
 # GO TRANSIT SECTION
 # ============================================================================
+st.markdown("<br><br>", unsafe_allow_html=True)
 st.header("GO Transit Live Status")
+st.markdown("<br>", unsafe_allow_html=True)
 
 go_stats = fetch_data(f"{GO_API}?type=stats")
 if go_stats:
     stats_dict = {i['metric']: i['value'] for i in go_stats}
 
     # Performance Dashboard
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4 = st.columns(4, gap="large")
 
     with col1:
         # Performance Gauge - Premium Theme
@@ -458,9 +462,11 @@ if go_stats:
         """, unsafe_allow_html=True)
 
     # Time Series Trends - Premium Theme
+    st.markdown("<br><br>", unsafe_allow_html=True)
     go_timeseries = fetch_data(f"{GO_API}?type=timeseries")
     if go_timeseries:
         st.subheader("24-Hour Activity Trends")
+        st.markdown("<br>", unsafe_allow_html=True)
 
         fig_ts = go.Figure()
         colors = ['#3b82f6', '#8b5cf6', '#10b981']
