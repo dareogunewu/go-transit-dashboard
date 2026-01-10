@@ -13,101 +13,128 @@ from route_data import get_route_name
 
 st.set_page_config(page_title="Vehicle Tracker", page_icon="🔍", layout="wide")
 
-# Grafana-Style Dark Theme
+# Bright Modern Theme (matches main app)
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
     * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     .main {
-        padding: 2rem 2rem;
-        background-color: #181b1f;
+        padding: 1.5rem 2rem !important;
+        max-width: 1600px;
+        margin: 0 auto;
     }
 
     .stApp {
-        background-color: #181b1f;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
     }
 
     .stMetric {
-        background: #242629;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid #2e3034;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-        transition: all 0.2s ease;
+        background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%) !important;
+        border: 2px solid #e0e7ff !important;
+        border-radius: 16px !important;
+        padding: 1.25rem 1rem !important;
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 120px;
     }
     .stMetric:hover {
-        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(59, 130, 246, 0.25) !important;
+        border-color: #3b82f6 !important;
     }
     .stMetric label {
-        color: #9fa3a8 !important;
-        font-weight: 500;
-        font-size: 0.75rem !important;
+        color: #6366f1 !important;
+        font-weight: 700 !important;
+        font-size: 0.7rem !important;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 1.2px;
         margin-bottom: 0.5rem !important;
     }
     .stMetric [data-testid="stMetricValue"] {
-        color: #d8d9da !important;
-        font-size: 1.875rem !important;
-        font-weight: 600;
-        line-height: 1;
+        color: #1e293b !important;
+        font-size: 2rem !important;
+        font-weight: 800 !important;
+        line-height: 1.2 !important;
     }
 
     h1 {
-        color: #d8d9da;
-        font-size: 1.875rem;
-        font-weight: 600;
+        color: #0f172a;
+        font-size: 3rem;
+        font-weight: 900;
         margin-bottom: 0.5rem;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.03em;
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     h2 {
-        color: #d8d9da;
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-top: 2.5rem;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid #2e3034;
+        color: #1e293b;
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin: 3rem 0 1.5rem 0;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 5px;
+        background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+        border-radius: 3px;
     }
     h3 {
-        color: #c4c7cc;
-        font-size: 1rem;
-        font-weight: 500;
+        color: #334155;
+        font-size: 1.125rem;
+        font-weight: 700;
         margin-bottom: 1rem;
     }
 
     .section-subtitle {
-        color: #9fa3a8;
-        font-size: 0.875rem;
-        font-weight: 400;
-        margin-top: 0.25rem;
-        margin-bottom: 2rem;
+        color: #64748b;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        margin-bottom: 2.5rem;
+        letter-spacing: 0.3px;
     }
 
     .element-container:has(> .stPlotlyChart) {
-        background: #242629;
-        border-radius: 8px;
-        padding: 1.25rem;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-        border: 1px solid #2e3034;
+        background: #ffffff;
+        border: 2px solid #e0e7ff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+    }
+    .element-container:has(> .stPlotlyChart):hover {
+        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+        border-color: #c7d2fe;
+        transform: translateY(-2px);
     }
 
     hr {
-        margin: 2rem 0;
+        margin: 3rem 0;
         border: none;
-        border-top: 1px solid #2e3034;
+        height: 3px;
+        background: linear-gradient(90deg, transparent 0%, #3b82f6 50%, transparent 100%);
+        opacity: 0.4;
     }
 
     [data-testid="stSidebar"] {
-        background-color: #1f2226;
-        border-right: 1px solid #2e3034;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        border-right: 2px solid #e0e7ff;
+        box-shadow: 4px 0 24px rgba(99, 102, 241, 0.1);
     }
     [data-testid="stSidebar"] * {
-        color: #d8d9da !important;
+        color: #1e293b !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -311,7 +338,7 @@ if not df.empty:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        # Status Distribution - Dark Theme
+        # Status Distribution - Bright Theme
         status_counts = df['Status'].value_counts()
 
         fig_status = go.Figure(data=[go.Pie(
@@ -319,50 +346,50 @@ if not df.empty:
             values=status_counts.values,
             hole=0.4,
             marker=dict(
-                colors=['#73bf69' if 'On Time' in str(s) else '#ff5705' if 'Delay' in str(s) else '#f5a742' for s in status_counts.index]
+                colors=['#10b981' if 'On Time' in str(s) else '#ef4444' if 'Delay' in str(s) else '#f59e0b' for s in status_counts.index]
             ),
             textinfo='label+value+percent',
-            textfont=dict(size=14, color='#d8d9da')
+            textfont=dict(size=14, color='#1e293b', family='Plus Jakarta Sans', weight=600)
         )])
 
         fig_status.update_layout(
-            title={'text': 'Status Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
+            title={'text': 'Status Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#1e293b', 'family': 'Plus Jakarta Sans'}},
             height=300,
-            paper_bgcolor='#242629',
-            plot_bgcolor='#242629',
-            font=dict(color='#d8d9da')
+            paper_bgcolor='#ffffff',
+            plot_bgcolor='#ffffff',
+            font=dict(color='#1e293b', family='Plus Jakarta Sans')
         )
 
         st.plotly_chart(fig_status, use_container_width=True)
 
     with col2:
-        # Motion Status - Dark Theme
+        # Motion Status - Bright Theme
         motion_data = df['IsInMotion'].value_counts()
 
         fig_motion = go.Figure(data=[go.Bar(
             x=['Moving', 'Stopped'],
             y=[motion_data.get(True, 0), motion_data.get(False, 0)],
-            marker=dict(color=['#73bf69', '#6e9bd1']),
+            marker=dict(color=['#10b981', '#3b82f6']),
             text=[motion_data.get(True, 0), motion_data.get(False, 0)],
             textposition='outside',
-            textfont=dict(size=16, color='#d8d9da')
+            textfont=dict(size=16, color='#0f172a', family='Plus Jakarta Sans', weight=700)
         )])
 
         fig_motion.update_layout(
-            title={'text': 'Motion Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
+            title={'text': 'Motion Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#1e293b', 'family': 'Plus Jakarta Sans'}},
             height=300,
-            yaxis=dict(title='Count', color='#d8d9da', gridcolor='#2e3034'),
-            xaxis=dict(color='#d8d9da'),
+            yaxis=dict(title='Count', color='#64748b', gridcolor='#e2e8f0', tickfont=dict(color='#334155', family='Plus Jakarta Sans')),
+            xaxis=dict(color='#334155', tickfont=dict(color='#334155', family='Plus Jakarta Sans')),
             showlegend=False,
-            paper_bgcolor='#242629',
-            plot_bgcolor='#242629',
-            font=dict(color='#d8d9da')
+            paper_bgcolor='#ffffff',
+            plot_bgcolor='#ffffff',
+            font=dict(color='#1e293b', family='Plus Jakarta Sans')
         )
 
         st.plotly_chart(fig_motion, use_container_width=True)
 
     with col3:
-        # Top 5 Routes - Dark Theme
+        # Top 5 Routes - Bright Theme
         route_counts = df['RouteName'].value_counts().head(5)
 
         fig_routes = go.Figure(data=[go.Bar(
@@ -371,22 +398,22 @@ if not df.empty:
             orientation='h',
             marker=dict(
                 color=route_counts.values,
-                colorscale=[[0, '#2e3034'], [0.5, '#6e9bd1'], [1, '#73bf69']],
+                colorscale=[[0, '#dbeafe'], [0.5, '#3b82f6'], [1, '#1e40af']],
                 showscale=False
             ),
             text=route_counts.values,
             textposition='outside',
-            textfont=dict(size=14, color='#d8d9da')
+            textfont=dict(size=14, color='#0f172a', family='Plus Jakarta Sans', weight=600)
         )])
 
         fig_routes.update_layout(
-            title={'text': 'Top 5 Active Routes', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
+            title={'text': 'Top 5 Active Routes', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#1e293b', 'family': 'Plus Jakarta Sans'}},
             height=300,
-            xaxis=dict(title='Vehicles', color='#d8d9da', gridcolor='#2e3034'),
-            yaxis=dict(categoryorder='total ascending', color='#d8d9da'),
-            paper_bgcolor='#242629',
-            plot_bgcolor='#242629',
-            font=dict(color='#d8d9da')
+            xaxis=dict(title='Vehicles', color='#64748b', gridcolor='#e2e8f0', tickfont=dict(color='#334155', family='Plus Jakarta Sans')),
+            yaxis=dict(categoryorder='total ascending', color='#334155', tickfont=dict(color='#334155', family='Plus Jakarta Sans')),
+            paper_bgcolor='#ffffff',
+            plot_bgcolor='#ffffff',
+            font=dict(color='#1e293b', family='Plus Jakarta Sans')
         )
 
         st.plotly_chart(fig_routes, use_container_width=True)
@@ -457,15 +484,22 @@ else:
     st.warning("⚠️ No vehicles found matching your search criteria.")
     st.info("💡 Try adjusting your filters or search parameters.")
 
-# Footer - Dark Theme
-st.markdown("---")
+# Footer - Bright Theme
+st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style='text-align: center; padding: 1.5rem 0; border-top: 1px solid #2e3034; margin-top: 2.5rem;'>
-        <p style='color: #9fa3a8; font-size: 0.8125rem; margin: 0; font-weight: 500;'>
-            Real-time GPS tracking • Metrolinx Open API
-        </p>
-        <p style='color: #6e7175; font-size: 0.75rem; margin-top: 0.375rem;'>
-            Data refreshes every 60 seconds
-        </p>
+    <div style='text-align: center; padding: 2.5rem 0; margin-top: 3rem;
+    background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+    border-top: 3px solid #3b82f6;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);'>
+        <div style='color: #1e40af; font-size: 0.875rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem;'>
+            🗺️ LIVE GPS TRACKING
+        </div>
+        <div style='color: #475569; font-size: 0.875rem; font-weight: 600;'>
+            Real-time vehicle positions • Metrolinx Open API
+        </div>
+        <div style='color: #64748b; font-size: 0.8rem; margin-top: 0.75rem;'>
+            🔄 Data refreshes every 60 seconds
+        </div>
     </div>
 """, unsafe_allow_html=True)
