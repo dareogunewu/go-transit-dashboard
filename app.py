@@ -546,6 +546,162 @@ if go_stats:
 
         st.plotly_chart(fig_ts, use_container_width=True)
 
+# ============================================================================
+# INTERACTIVE ROUTE TRACKING
+# ============================================================================
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.header("🗺️ Live Route Tracking")
+st.markdown("<p class='section-subtitle'>Select a route to view live vehicle positions on the map</p>", unsafe_allow_html=True)
+
+# Fetch vehicle data
+from route_data import GO_ROUTES, get_route_name
+go_vehicles = fetch_data(f"{GO_API}?type=vehicles")
+
+if go_vehicles:
+    df_vehicles = pd.DataFrame(go_vehicles)
+
+    # Get available routes with active vehicles
+    if 'RouteCode' in df_vehicles.columns:
+        active_routes = df_vehicles['RouteCode'].unique()
+        train_routes = [r for r in active_routes if r in ['ST', 'RH', 'MI', 'LW', 'LE', 'KI', 'BR', 'GT']]
+        bus_routes = [r for r in active_routes if r not in train_routes]
+
+        col1, col2 = st.columns([1, 3])
+
+        with col1:
+            st.markdown("""
+                <div style='background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+                border: 2px solid #3b82f6; border-radius: 16px; padding: 1.5rem;
+                box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);'>
+                    <div style='color: #1e40af; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem;'>
+                        📍 SELECT ROUTE
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            # Train routes section
+            if train_routes:
+                st.markdown("**🚂 Train Lines**")
+                selected_route = st.selectbox(
+                    "Train routes:",
+                    options=[''] + sorted(train_routes),
+                    format_func=lambda x: f"{get_route_name(x)} ({x})" if x else "Choose a train line...",
+                    label_visibility="collapsed"
+                )
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            # Bus routes section
+            if bus_routes and not selected_route:
+                st.markdown("**🚌 Bus Routes**")
+                selected_route = st.selectbox(
+                    "Bus routes:",
+                    options=[''] + sorted(bus_routes, key=lambda x: int(x) if x.isdigit() else 999),
+                    format_func=lambda x: f"{get_route_name(x)} ({x})" if x else "Choose a bus route...",
+                    label_visibility="collapsed"
+                )
+
+        with col2:
+            if selected_route:
+                # Filter vehicles for selected route
+                route_vehicles = df_vehicles[df_vehicles['RouteCode'] == selected_route]
+                route_vehicles_with_loc = route_vehicles[(route_vehicles['Latitude'] != 0) & (route_vehicles['Longitude'] != 0)]
+
+                if not route_vehicles_with_loc.empty:
+                    # Display route info
+                    st.markdown(f"""
+                        <div style='background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+                        border: 2px solid #e0e7ff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;
+                        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);'>
+                            <div style='color: #6366f1; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 0.5rem;'>
+                                NOW TRACKING
+                            </div>
+                            <div style='color: #0f172a; font-size: 1.5rem; font-weight: 900; margin-bottom: 0.5rem;'>
+                                {get_route_name(selected_route)}
+                            </div>
+                            <div style='color: #64748b; font-size: 0.875rem; font-weight: 600;'>
+                                🚦 {len(route_vehicles_with_loc)} vehicles active • Route {selected_route}
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
+
+                    # Create map
+                    center_lat = route_vehicles_with_loc['Latitude'].mean()
+                    center_lon = route_vehicles_with_loc['Longitude'].mean()
+
+                    # Determine zoom
+                    lat_range = route_vehicles_with_loc['Latitude'].max() - route_vehicles_with_loc['Latitude'].min()
+                    lon_range = route_vehicles_with_loc['Longitude'].max() - route_vehicles_with_loc['Longitude'].min()
+                    max_range = max(lat_range, lon_range)
+
+                    if max_range < 0.1:
+                        zoom = 12
+                    elif max_range < 0.5:
+                        zoom = 10
+                    elif max_range < 1.0:
+                        zoom = 9
+                    else:
+                        zoom = 8
+
+                    import plotly.express as px
+
+                    fig_route_map = px.scatter_mapbox(
+                        route_vehicles_with_loc,
+                        lat="Latitude",
+                        lon="Longitude",
+                        color="Status",
+                        size=[15] * len(route_vehicles_with_loc),
+                        hover_name="Display",
+                        hover_data={
+                            "TripNumber": True,
+                            "Status": True,
+                            "IsInMotion": True,
+                            "Latitude": ":.4f",
+                            "Longitude": ":.4f"
+                        },
+                        color_discrete_map={"On Time": "#10b981", "Delayed": "#ef4444", "Early": "#3b82f6"},
+                        zoom=zoom,
+                        height=500
+                    )
+
+                    fig_route_map.update_layout(
+                        mapbox_style="streets",
+                        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+                        hoverlabel=dict(bgcolor="#ffffff", font_size=12, font_color="#0f172a"),
+                        paper_bgcolor='#ffffff',
+                        plot_bgcolor='#ffffff'
+                    )
+
+                    st.plotly_chart(fig_route_map, use_container_width=True)
+
+                    # Vehicle details
+                    st.markdown("**🚦 Active Vehicles**")
+                    vehicle_details = route_vehicles[['Display', 'Status', 'TripNumber', 'IsInMotion']].copy()
+                    vehicle_details['IsInMotion'] = vehicle_details['IsInMotion'].map({True: '🟢 Moving', False: '🔴 Stopped'})
+                    st.dataframe(vehicle_details, use_container_width=True, height=200)
+                else:
+                    st.info(f"No vehicles with GPS data found for {get_route_name(selected_route)} at this time.")
+            else:
+                # Show instruction card
+                st.markdown("""
+                    <div style='background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+                    border: 2px dashed #3b82f6; border-radius: 16px; padding: 3rem; text-align: center;
+                    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);'>
+                        <div style='font-size: 3rem; margin-bottom: 1rem;'>🗺️</div>
+                        <div style='color: #1e293b; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;'>
+                            Select a Route to Begin Tracking
+                        </div>
+                        <div style='color: #64748b; font-size: 0.875rem; font-weight: 600;'>
+                            Choose a train line or bus route from the left sidebar to view live vehicle positions
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+    else:
+        st.warning("Unable to load route data at this time.")
+else:
+    st.warning("Unable to load vehicle data for route tracking.")
 
 # Bright Footer
 st.markdown("<br><br>", unsafe_allow_html=True)
