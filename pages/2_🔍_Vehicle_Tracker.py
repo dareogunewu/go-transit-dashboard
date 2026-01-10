@@ -271,7 +271,7 @@ if show_map and not df_with_location.empty:
     else:
         zoom = 8
 
-    # Create map
+    # Create map - Dark Theme
     fig_map = px.scatter_mapbox(
         df_with_location,
         lat="Latitude",
@@ -287,15 +287,17 @@ if show_map and not df_with_location.empty:
             "Latitude": ":.4f",
             "Longitude": ":.4f"
         },
-        color_discrete_map={"Train": "#00853E", "Bus": "#757575"},
+        color_discrete_map={"Train": "#73bf69", "Bus": "#6e9bd1"},
         zoom=zoom,
         height=500
     )
 
     fig_map.update_layout(
-        mapbox_style="open-street-map",
+        mapbox_style="dark",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        hoverlabel=dict(bgcolor="white", font_size=12)
+        hoverlabel=dict(bgcolor="#242629", font_size=12, font_color="#d8d9da"),
+        paper_bgcolor='#242629',
+        plot_bgcolor='#242629'
     )
 
     st.plotly_chart(fig_map, use_container_width=True)
@@ -309,7 +311,7 @@ if not df.empty:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        # Status Distribution
+        # Status Distribution - Dark Theme
         status_counts = df['Status'].value_counts()
 
         fig_status = go.Figure(data=[go.Pie(
@@ -317,41 +319,50 @@ if not df.empty:
             values=status_counts.values,
             hole=0.4,
             marker=dict(
-                colors=['#2e7d32' if 'On Time' in str(s) else '#c62828' if 'Delay' in str(s) else '#f57c00' for s in status_counts.index]
+                colors=['#73bf69' if 'On Time' in str(s) else '#ff5705' if 'Delay' in str(s) else '#f5a742' for s in status_counts.index]
             ),
-            textinfo='label+value+percent'
+            textinfo='label+value+percent',
+            textfont=dict(size=14, color='#d8d9da')
         )])
 
         fig_status.update_layout(
-            title={'text': 'Status Distribution', 'x': 0.5, 'xanchor': 'center'},
-            height=300
+            title={'text': 'Status Distribution', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
+            height=300,
+            paper_bgcolor='#242629',
+            plot_bgcolor='#242629',
+            font=dict(color='#d8d9da')
         )
 
         st.plotly_chart(fig_status, use_container_width=True)
 
     with col2:
-        # Motion Status
+        # Motion Status - Dark Theme
         motion_data = df['IsInMotion'].value_counts()
 
         fig_motion = go.Figure(data=[go.Bar(
             x=['Moving', 'Stopped'],
             y=[motion_data.get(True, 0), motion_data.get(False, 0)],
-            marker=dict(color=['#00853E', '#757575']),
+            marker=dict(color=['#73bf69', '#6e9bd1']),
             text=[motion_data.get(True, 0), motion_data.get(False, 0)],
-            textposition='outside'
+            textposition='outside',
+            textfont=dict(size=16, color='#d8d9da')
         )])
 
         fig_motion.update_layout(
-            title={'text': 'Motion Status', 'x': 0.5, 'xanchor': 'center'},
+            title={'text': 'Motion Status', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
             height=300,
-            yaxis_title='Count',
-            showlegend=False
+            yaxis=dict(title='Count', color='#d8d9da', gridcolor='#2e3034'),
+            xaxis=dict(color='#d8d9da'),
+            showlegend=False,
+            paper_bgcolor='#242629',
+            plot_bgcolor='#242629',
+            font=dict(color='#d8d9da')
         )
 
         st.plotly_chart(fig_motion, use_container_width=True)
 
     with col3:
-        # Top 5 Routes
+        # Top 5 Routes - Dark Theme
         route_counts = df['RouteName'].value_counts().head(5)
 
         fig_routes = go.Figure(data=[go.Bar(
@@ -360,18 +371,22 @@ if not df.empty:
             orientation='h',
             marker=dict(
                 color=route_counts.values,
-                colorscale='Blues',
+                colorscale=[[0, '#2e3034'], [0.5, '#6e9bd1'], [1, '#73bf69']],
                 showscale=False
             ),
             text=route_counts.values,
-            textposition='outside'
+            textposition='outside',
+            textfont=dict(size=14, color='#d8d9da')
         )])
 
         fig_routes.update_layout(
-            title={'text': 'Top 5 Active Routes', 'x': 0.5, 'xanchor': 'center'},
+            title={'text': 'Top 5 Active Routes', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 18, 'color': '#d8d9da'}},
             height=300,
-            xaxis_title='Vehicles',
-            yaxis={'categoryorder': 'total ascending'}
+            xaxis=dict(title='Vehicles', color='#d8d9da', gridcolor='#2e3034'),
+            yaxis=dict(categoryorder='total ascending', color='#d8d9da'),
+            paper_bgcolor='#242629',
+            plot_bgcolor='#242629',
+            font=dict(color='#d8d9da')
         )
 
         st.plotly_chart(fig_routes, use_container_width=True)
@@ -442,12 +457,15 @@ else:
     st.warning("⚠️ No vehicles found matching your search criteria.")
     st.info("💡 Try adjusting your filters or search parameters.")
 
-# Footer
+# Footer - Dark Theme
 st.markdown("---")
 st.markdown("""
-    <div style='text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
-        <h3 style='color: #333; margin-bottom: 10px;'>🔍 Vehicle Tracker</h3>
-        <p style='color: #666; margin: 5px 0;'>Real-time GPS tracking powered by Metrolinx Open API</p>
-        <p style='color: #999; margin: 5px 0; font-size: 0.875rem;'>Data refreshes every 60 seconds</p>
+    <div style='text-align: center; padding: 1.5rem 0; border-top: 1px solid #2e3034; margin-top: 2.5rem;'>
+        <p style='color: #9fa3a8; font-size: 0.8125rem; margin: 0; font-weight: 500;'>
+            Real-time GPS tracking • Metrolinx Open API
+        </p>
+        <p style='color: #6e7175; font-size: 0.75rem; margin-top: 0.375rem;'>
+            Data refreshes every 60 seconds
+        </p>
     </div>
 """, unsafe_allow_html=True)

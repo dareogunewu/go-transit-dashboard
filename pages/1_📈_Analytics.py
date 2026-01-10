@@ -665,30 +665,30 @@ if show_insights:
 
     with insights_col1:
         st.markdown("""
-        <div style='background: white; padding: 25px; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
-            <h3 style='color: #333; margin-top: 0;'>📊 Performance Insights</h3>
-            <ul style='color: #666; line-height: 1.8;'>
-                <li>Average performance: <b style='color: #1a1a1a;'>{:.1f}%</b> <span style='color: {};'>{}</span> vs 95% target</li>
-                <li>Best performance day: <b style='color: #2e7d32;'>{:.1f}%</b></li>
+        <div style='background: #242629; padding: 25px; border-radius: 8px; border: 1px solid #2e3034; box-shadow: 0 1px 2px rgba(0,0,0,0.3);'>
+            <h3 style='color: #d8d9da; margin-top: 0;'>📊 Performance Insights</h3>
+            <ul style='color: #9fa3a8; line-height: 1.8;'>
+                <li>Average performance: <b style='color: #d8d9da;'>{:.1f}%</b> <span style='color: {};'>{}</span> vs 95% target</li>
+                <li>Best performance day: <b style='color: #73bf69;'>{:.1f}%</b></li>
                 <li>Performance trend: <b style='color: {};'>{:+.1f}%</b> over period</li>
-                <li>Consistency (lower is better): <b style='color: #1a1a1a;'>{:.2f}σ</b></li>
+                <li>Consistency (lower is better): <b style='color: #d8d9da;'>{:.2f}σ</b></li>
             </ul>
         </div>
         """.format(
             avg_performance,
-            "#2e7d32" if avg_performance >= 95 else "#c62828",
+            "#73bf69" if avg_performance >= 95 else "#ff5705",
             "✅ Above" if avg_performance >= 95 else "⚠️ Below",
             df_history['performance'].max(),
-            "#2e7d32" if performance_trend >= 0 else "#c62828",
+            "#73bf69" if performance_trend >= 0 else "#ff5705",
             performance_trend,
             df_history['performance'].std()
         ), unsafe_allow_html=True)
 
     with insights_col2:
         st.markdown("""
-        <div style='background: white; padding: 25px; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);'>
-            <h3 style='color: #333; margin-top: 0;'>🎯 Recommendations</h3>
-            <ul style='color: #666; line-height: 1.8;'>
+        <div style='background: #242629; padding: 25px; border-radius: 8px; border: 1px solid #2e3034; box-shadow: 0 1px 2px rgba(0,0,0,0.3);'>
+            <h3 style='color: #d8d9da; margin-top: 0;'>🎯 Recommendations</h3>
+            <ul style='color: #9fa3a8; line-height: 1.8;'>
                 <li>Focus on routes with <80% on-time rate</li>
                 <li>Peak hour performance needs attention</li>
                 <li>Monitor high-volume routes closely</li>
